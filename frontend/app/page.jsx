@@ -1,11 +1,34 @@
-// components/Homepage.jsx
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
-import '../app/styles/login.css'; // Importa el archivo CSS
+import '../app/styles/login.css';
+import DetalleArticle from './detail-article/page';
 
 export default function Homepage() {
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const items = [
+    {
+      title: 'Smartphone Premium 256GB',
+      subtitle: 'Último Modelo',
+      imageUrl: 'https://cdn.pixabay.com/photo/2016/11/29/12/30/phone-1869510_960_720.jpg',
+      price: '1799.00',
+      bids: 5,
+      description: 'Este es un smartphone de última generación, con 256GB de almacenamiento y una cámara increíble.',
+    },
+    {
+      title: 'Tablet Android 10"',
+      subtitle: 'Perfecta para Estudiantes',
+      imageUrl: 'https://cdn.pixabay.com/photo/2016/03/27/19/43/samsung-1283938_960_720.jpg',
+      price: '650.00',
+      bids: 5,
+      description: 'Una tablet Android de 10", ideal para estudiar y entretenimiento.',
+    },
+  ];
+
   return (
     <div className="dashboard">
-      {/* Barra superior con iconos */}
       <header className="app-header">
         <div className="top-bar">
           <div className="top-bar-left">
@@ -28,7 +51,6 @@ export default function Homepage() {
           </div>
         </div>
 
-        {/* Barra de navegación principal - Movida al header */}
         <nav className="main-nav">
           <div className="nav-brand">
             <i className="fas fa-gavel"></i> SubastaYa
@@ -46,14 +68,13 @@ export default function Homepage() {
             <button>
               <i className="fas fa-heart"></i> Favoritos
             </button>
-            <button>
+            <Link href="/login/profile" className="profile-btn">
               <i className="fas fa-user"></i> Perfil
-            </button>
+            </Link>
           </div>
         </nav>
       </header>
 
-      {/* Filtros rápidos */}
       <div className="quick-filters">
         <button className="filter-btn active">Todos</button>
         <button className="filter-btn">Electrónica</button>
@@ -64,9 +85,7 @@ export default function Homepage() {
         <button className="filter-btn">Moda</button>
       </div>
 
-      {/* Contenido principal */}
       <main className="main-content">
-        {/* Sección de subastas destacadas */}
         <section className="auction-section">
           <div className="section-header">
             <h2>Subastas Destacadas</h2>
@@ -74,8 +93,7 @@ export default function Homepage() {
           </div>
           
           <div className="auctions-grid">
-            {/* Subasta 1 */}
-            <div className="auction-card">
+            <div className="auction-card" onClick={() => setSelectedItem(items[0])}>
               <div className="auction-badge">Destacado</div>
               <img src="https://cdn.pixabay.com/photo/2016/11/29/12/30/phone-1869510_960_720.jpg" alt="Smartphone" />
               <div className="auction-info">
@@ -92,8 +110,7 @@ export default function Homepage() {
               </div>
             </div>
 
-            {/* Subasta 2 */}
-            <div className="auction-card">
+            <div className="auction-card" onClick={() => setSelectedItem(items[1])}>
               <img src="https://cdn.pixabay.com/photo/2016/03/27/19/43/samsung-1283938_960_720.jpg" alt="Tablet" />
               <div className="auction-info">
                 <h3>Tablet Android 10"</h3>
@@ -111,7 +128,6 @@ export default function Homepage() {
           </div>
         </section>
 
-        {/* Sección de subastas finalizando pronto */}
         <section className="auction-section">
           <div className="section-header">
             <h2>Finalizando Pronto</h2>
@@ -119,7 +135,6 @@ export default function Homepage() {
           </div>
           
           <div className="auctions-grid">
-            {/* Subasta 1 */}
             <div className="auction-card">
               <img src="https://cdn.pixabay.com/photo/2018/01/28/21/14/lens-3114729_960_720.jpg" alt="Lente" />
               <div className="auction-info">
@@ -136,7 +151,6 @@ export default function Homepage() {
               </div>
             </div>
 
-            {/* Subasta 2 */}
             <div className="auction-card">
               <img src="https://cdn.pixabay.com/photo/2016/03/27/07/12/apple-watch-1282242_960_720.jpg" alt="Smartwatch" />
               <div className="auction-info">
@@ -154,7 +168,39 @@ export default function Homepage() {
             </div>
           </div>
         </section>
+        
+        <section className="auction-section">
+          <div className="section-header">
+            <h2>Subastas Destacadas</h2>
+            <button className="see-all">Ver todo</button>
+          </div>
+
+          <div className="auctions-grid">
+            {items.map((item, index) => (
+              <div key={index} className="auction-card" onClick={() => setSelectedItem(item)}>
+                <div className="auction-badge">Destacado</div>
+                <img src={item.imageUrl} alt={item.title} />
+                <div className="auction-info">
+                  <h3>{item.title}</h3>
+                  <p className="subtitle">{item.subtitle}</p>
+                  <div className="price-section">
+                    <span className="price">S/ {item.price}</span>
+                    <span className="bids">{item.bids} pujas</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
       </main>
+
+      {selectedItem && (
+        <DetalleArticle 
+          item={selectedItem} 
+          isOpen={Boolean(selectedItem)} 
+          toggleDetails={() => setSelectedItem(null)} 
+        />
+      )}
     </div>
   );
 }
