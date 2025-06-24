@@ -1,4 +1,3 @@
-// app/create-auction/page.jsx
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -8,20 +7,31 @@ export default function CreateAuctionPage() {
   const router = useRouter();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState('Todos');
   const [basePrice, setBasePrice] = useState('');
   const [images, setImages] = useState([]);
   const [previews, setPreviews] = useState([]);
   const [initialPrice, setInitialPrice] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [shipping, setShipping] = useState(''); // Asegúrate de que 'shipping' sea un valor escalar
+  const [paymentMethods, setPaymentMethods] = useState(''); // Asegúrate de que 'paymentMethods' sea un valor escalar
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    setImages(files);
-    setPreviews(files.map(f => URL.createObjectURL(f)));
+    const validFormats = ['image/jpeg', 'image/png']; // formatos de imagen válidos
+    const validFiles = files.filter(file => validFormats.includes(file.type));
+
+    // Añadir las imágenes nuevas a las imágenes existentes sin sobreescribirlas
+    setImages(prevImages => [...prevImages, ...validFiles]);
+
+    // Crear las previsualizaciones de las imágenes añadidas
+    setPreviews(prevPreviews => [
+      ...prevPreviews,
+      ...validFiles.map(f => URL.createObjectURL(f)),
+    ]);
   };
 
   const uploadImages = async (files) => {
@@ -31,6 +41,18 @@ export default function CreateAuctionPage() {
     if (!res.ok) throw new Error('Error subiendo imágenes');
     const { urls } = await res.json();
     return urls;
+  };
+
+  const handleCategoryChange = (e) => {
+    setCategory(e.target.value);
+  };
+
+  const handlePaymentMethodsChange = (e) => {
+    setPaymentMethods(e.target.value); // Cambié de 'e.target.value' a 'e.target.value' para ajustarlo como un valor único
+  };
+
+  const handleShippingChange = (e) => {
+    setShipping(e.target.value); // Asegúrate de que solo se maneje como una cadena, no como un array
   };
 
   const handleSubmit = async (e) => {
@@ -48,7 +70,9 @@ export default function CreateAuctionPage() {
           description,
           category,
           base_price: basePrice,
-          images: imageUrls
+          images: imageUrls,
+          shipping,
+          payment_methods: paymentMethods,
         })
       });
       if (!prodRes.ok) throw new Error('Error creando producto');
@@ -78,7 +102,6 @@ export default function CreateAuctionPage() {
 
   return (
     <div className="dashboard">
-      {/* Barra superior con iconos */}
       <header className="app-header">
         <div className="top-bar">
           <div className="top-bar-left">
@@ -101,39 +124,36 @@ export default function CreateAuctionPage() {
           </div>
         </div>
 
-        {/* Barra de navegación principal */}
         <nav className="main-nav">
           <div className="nav-brand">
             <i className="fas fa-gavel"></i> SubastaYa
           </div>
           <div className="nav-tabs">
-            <button onClick={() => router.push('/')}>
+            <button onClick={() => router.push('/')} className="nav-item">
               <i className="fas fa-home"></i> Inicio
             </button>
-            <button>
+            <button className="nav-item">
               <i className="fas fa-search"></i> Buscar
             </button>
-            <button className="create-auction-btn active">
+            <button className="nav-item active">
               <i className="fas fa-plus-circle"></i> Crear Subasta
             </button>
-            <button>
+            <button className="nav-item">
               <i className="fas fa-heart"></i> Favoritos
             </button>
-            <button>
+            <button className="nav-item">
               <i className="fas fa-user"></i> Perfil
             </button>
           </div>
         </nav>
       </header>
 
-      {/* Contenido principal del formulario */}
       <main className="main-content create-auction-content">
         <div className="auction-form-container">
           <h1 className="auction-form-title">Crear Nueva Subasta</h1>
           {error && <p className="auction-form-error">{error}</p>}
           
           <form onSubmit={handleSubmit} className="auction-form">
-            {/* Sección de producto */}
             <div className="form-section">
               <h2>Información del Producto</h2>
               <div className="form-grid">
@@ -148,23 +168,28 @@ export default function CreateAuctionPage() {
                 </div>
                 <div className="form-field">
                   <label>Categoría</label>
-                  <input 
-                    type="text" 
-                    value={category} 
-                    onChange={e => setCategory(e.target.value)} 
-                  />
+                  <select value={category} onChange={handleCategoryChange} required>
+                    <option value="Todos">Todos</option>
+                    <option value="Electrónica">Electrónica</option>
+                    <option value="Arte">Arte</option>
+                    <option value="Coleccionables">Coleccionables</option>
+                    <option value="Vehículos">Vehículos</option>
+                    <option value="Inmuebles">Inmuebles</option>
+                    <option value="Moda">Moda</option>
+                  </select>
                 </div>
               </div>
-              
+
               <div className="form-field">
                 <label>Descripción</label>
                 <textarea 
                   value={description} 
                   onChange={e => setDescription(e.target.value)} 
                   rows={3} 
+                  required
                 />
               </div>
-              
+
               <div className="form-field">
                 <label>Precio Base (S/)</label>
                 <input 
@@ -175,12 +200,12 @@ export default function CreateAuctionPage() {
                   required 
                 />
               </div>
-              
+
               <div className="form-field">
                 <label>Imágenes del Producto</label>
                 <input 
                   type="file" 
-                  accept="image/*" 
+                  accept="image/jpeg, image/png" 
                   multiple 
                   onChange={handleImageChange} 
                 />
@@ -191,10 +216,12 @@ export default function CreateAuctionPage() {
                     ))}
                   </div>
                 )}
+                <p className="image-restriction">
+                  Solo se permiten imágenes en formato JPG o PNG.
+                </p>
               </div>
             </div>
-            
-            {/* Sección de subasta */}
+
             <div className="form-section">
               <h2>Detalles de la Subasta</h2>
               <div className="form-grid">
@@ -215,6 +242,7 @@ export default function CreateAuctionPage() {
                     value={startDate} 
                     onChange={e => setStartDate(e.target.value)} 
                     required 
+                    className="datetime-input"
                   />
                 </div>
                 <div className="form-field">
@@ -224,24 +252,41 @@ export default function CreateAuctionPage() {
                     value={endDate} 
                     onChange={e => setEndDate(e.target.value)} 
                     required 
+                    className="datetime-input"
                   />
+                </div>
+                <div className="form-field">
+                  <label>Envío</label>
+                  <select value={shipping} onChange={handleShippingChange} required>
+                    <option value="Aéreo">Aéreo</option>
+                    <option value="Terrestre">Terrestre</option>
+                  </select>
+                </div>
+                <div className="form-field">
+                  <label>Métodos de Pago</label>
+                  <select value={paymentMethods} onChange={handlePaymentMethodsChange} required>
+                    <option value="Efectivo">Efectivo</option>
+                    <option value="Tarjeta">Tarjetas de Crédito/Débito</option>
+                    <option value="Transferencia">Transferencias Bancarias</option>
+                    <option value="Monedero">Monederos Digitales</option>
+                  </select>
                 </div>
               </div>
             </div>
-            
+
             <button 
               type="submit" 
               className="submit-button"
               disabled={loading}
             >
               {loading ? (
-                <>
+                <React.Fragment>
                   <i className="fas fa-spinner fa-spin"></i> Creando...
-                </>
+                </React.Fragment>
               ) : (
-                <>
+                <React.Fragment>
                   <i className="fas fa-gavel"></i> Publicar Subasta
-                </>
+                </React.Fragment>
               )}
             </button>
           </form>
