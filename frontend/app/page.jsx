@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Header from '../app/componets/Header';
 import '../app/styles/global.css';
 import DetalleArticle from './detail-article/page';
 
@@ -29,52 +30,7 @@ export default function Homepage() {
 
   return (
     <div className="dashboard">
-      <header className="app-header">
-        <div className="top-bar">
-          <div className="top-bar-left">
-            <button className="menu-toggle">
-              <i className="fas fa-bars"></i>
-            </button>
-            <div className="search-box">
-              <i className="fas fa-search"></i>
-              <input type="text" placeholder="Buscar subastas..." />
-            </div>
-          </div>
-          <div className="top-bar-right">
-            <button className="notifications">
-              <i className="fas fa-bell"></i>
-              <span className="badge">5</span>
-            </button>
-            <button className="user-avatar">
-              <i className="fas fa-user-circle"></i>
-            </button>
-          </div>
-        </div>
-
-        <nav className="main-nav">
-          <div className="nav-brand">
-            <i className="fas fa-gavel"></i> SubastaYa
-          </div>
-          <div className="nav-tabs">
-            <button className="active">
-              <i className="fas fa-home"></i> Inicio
-            </button>
-            <button>
-              <i className="fas fa-search"></i> Buscar
-            </button>
-            <Link href="/create-auction" className="create-auction-btn">
-              <i className="fas fa-plus-circle"></i> Crear Subasta
-            </Link>
-            <button>
-              <i className="fas fa-heart"></i> Favoritos
-            </button>
-            
-            <Link href="/login/profile" className="profile-btn">
-              <i className="fas fa-user"></i> Perfil
-            </Link>
-          </div>
-        </nav>
-      </header>
+      <Header />
 
       <div className="quick-filters">
         <button className="filter-btn active">Todos</button>
@@ -172,14 +128,14 @@ export default function Homepage() {
         
         <section className="auction-section">
           <div className="section-header">
-            <h2>Subastas Destacadas</h2>
+            <h2>Subastas Recientes</h2>
             <button className="see-all">Ver todo</button>
           </div>
 
           <div className="auctions-grid">
             {items.map((item, index) => (
               <div key={index} className="auction-card" onClick={() => setSelectedItem(item)}>
-                <div className="auction-badge">Destacado</div>
+                <div className="auction-badge">Nuevo</div>
                 <img src={item.imageUrl} alt={item.title} />
                 <div className="auction-info">
                   <h3>{item.title}</h3>
