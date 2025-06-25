@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Header from '../componets/Header'; // Importa el componente Header
 import '../create-auction/create-auction.css';
 
 export default function CreateAuctionPage() {
@@ -16,9 +15,6 @@ export default function CreateAuctionPage() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [shipping, setShipping] = useState('');
-<<<<<<< HEAD
-  const [paymentMethods, setPaymentMethods] = useState('');
-=======
   const [paymentMethod, setPaymentMethod] = useState('');
   const [bankDetails, setBankDetails] = useState({
     bankName: '',
@@ -28,7 +24,6 @@ export default function CreateAuctionPage() {
   const [digitalWallet, setDigitalWallet] = useState({
     phoneNumber: ''
   });
->>>>>>> kevin
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -57,14 +52,6 @@ export default function CreateAuctionPage() {
     setCategory(e.target.value);
   };
 
-<<<<<<< HEAD
-  const handlePaymentMethodsChange = (e) => {
-    setPaymentMethods(e.target.value);
-  };
-
-  const handleShippingChange = (e) => {
-    setShipping(e.target.value);
-=======
   const handleShippingChange = (e) => {
     setShipping(e.target.value);
   };
@@ -85,7 +72,6 @@ export default function CreateAuctionPage() {
     }
 
     return true;
->>>>>>> kevin
   };
 
   const handleSubmit = async (e) => {
@@ -97,11 +83,7 @@ export default function CreateAuctionPage() {
       setLoading(false);
       return;
     }
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> kevin
     try {
       // Validar método de pago seleccionado
       if (!paymentMethod) {
@@ -163,31 +145,54 @@ export default function CreateAuctionPage() {
       setLoading(false);
     }
   };
-<<<<<<< HEAD
-  
-  const validateDates = () => {
-    const now = new Date();
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    if (start <= now) {
-      setError('La fecha de inicio debe ser en el futuro');
-      return false;
-    }
-
-    if (end <= start) {
-      setError('La fecha de fin debe ser posterior a la fecha de inicio');
-      return false;
-    }
-
-    return true;
-  };
-=======
->>>>>>> kevin
 
   return (
     <div className="dashboard">
-      <Header /> {/* Usamos el componente Header aquí */}
+      <header className="app-header">
+        <div className="top-bar">
+          <div className="top-bar-left">
+            <button className="menu-toggle">
+              <i className="fas fa-bars"></i>
+            </button>
+            <div className="search-box">
+              <i className="fas fa-search"></i>
+              <input type="text" placeholder="Buscar subastas..." />
+            </div>
+          </div>
+          <div className="top-bar-right">
+            <button className="notifications">
+              <i className="fas fa-bell"></i>
+              <span className="badge">5</span>
+            </button>
+            <button className="user-avatar">
+              <i className="fas fa-user-circle"></i>
+            </button>
+          </div>
+        </div>
+
+        <nav className="main-nav">
+          <div className="nav-brand">
+            <i className="fas fa-gavel"></i> SubastaYa
+          </div>
+          <div className="nav-tabs">
+            <button onClick={() => router.push('/')} className="nav-item">
+              <i className="fas fa-home"></i> Inicio
+            </button>
+            <button className="nav-item">
+              <i className="fas fa-search"></i> Buscar
+            </button>
+            <button className="nav-item active">
+              <i className="fas fa-plus-circle"></i> Crear Subasta
+            </button>
+            <button className="nav-item">
+              <i className="fas fa-heart"></i> Favoritos
+            </button>
+            <button className="nav-item">
+              <i className="fas fa-user"></i> Perfil
+            </button>
+          </div>
+        </nav>
+      </header>
 
       <main className="main-content create-auction-content">
         <div className="auction-form-container">
