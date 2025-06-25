@@ -808,107 +808,139 @@ input:checked + .slider:before {
   transform: translateY(-2px);
 }
 
-/* Reputación */
-.reputation-summary {
-  margin-top: 1.5rem;
+/* Métodos de pago */
+.payment-methods-list {
+  margin: 1.5rem 0;
 }
 
-.rating-display {
+.payment-method {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.rating-value {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--primary);
-}
-
-.stars {
-  display: flex;
-  gap: 0.2rem;
-}
-
-.fa-star {
-  color: var(--light-gray);
-  font-size: 1.2rem;
-}
-
-.fa-star.filled {
-  color: var(--warning);
-}
-
-.rating-count {
-  font-size: 0.9rem;
-  color: var(--gray);
-}
-
-.reviews-list {
-  max-height: 300px;
-  overflow-y: auto;
-  padding-right: 0.5rem;
-}
-
-.review-item {
-  background: var(--light);
   padding: 1rem;
-  border-radius: 8px;
+  background: var(--light);
+  border-radius: 10px;
   margin-bottom: 1rem;
+  border: 1px solid var(--light-gray);
+  transition: var(--transition);
 }
 
-.review-header {
+.payment-method:hover {
+  border-color: var(--primary);
+}
+
+.payment-method.default {
+  border-left: 4px solid var(--success);
+  background: rgba(0, 184, 148, 0.05);
+}
+
+.method-icon {
+  width: 50px;
+  height: 50px;
+  background: white;
+  border-radius: 8px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
-  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: var(--primary);
+  margin-right: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.method-details {
+  flex: 1;
+}
+
+.method-type {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
   gap: 0.5rem;
 }
 
-.review-user {
-  font-weight: 600;
-  color: var(--primary-dark);
+.default-badge {
+  background: var(--success);
+  color: white;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 50px;
 }
 
-.review-rating .fa-star {
+.method-number {
+  font-family: 'Courier New', monospace;
+  color: var(--dark);
+  margin-bottom: 0.2rem;
+}
+
+.method-name {
   font-size: 0.9rem;
+  color: var(--gray);
 }
 
-.review-date {
+.method-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.set-default-btn {
+  padding: 0.5rem 1rem;
+  background: var(--light);
+  border: 1px solid var(--light-gray);
+  border-radius: 6px;
+  color: var(--dark);
   font-size: 0.8rem;
-  color: var(--gray);
+  cursor: pointer;
+  transition: var(--transition);
 }
 
-.review-auction {
-  font-size: 0.9rem;
-  color: var(--gray);
-  margin-bottom: 0.5rem;
+.set-default-btn:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
 }
 
-.review-comment {
-  font-size: 0.9rem;
-  line-height: 1.5;
+.remove-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--light);
+  border: 1px solid var(--light-gray);
+  border-radius: 6px;
+  color: var(--danger);
+  cursor: pointer;
+  transition: var(--transition);
 }
 
-.no-reviews {
+.remove-btn:hover {
+  background: var(--danger);
+  color: white;
+}
+
+.empty-payment-methods {
   text-align: center;
   padding: 2rem;
+  margin: 1.5rem 0;
+  background: var(--light);
+  border-radius: 10px;
+}
+
+.empty-payment-methods .empty-icon {
+  font-size: 2.5rem;
+  color: var(--light-gray);
+  margin-bottom: 1rem;
+}
+
+.empty-payment-methods p {
   color: var(--gray);
 }
 
-.no-reviews i {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: var(--light-gray);
-}
-
-/* Eliminar cuenta */
-.delete-account-btn {
+.add-payment-btn {
   width: 100%;
   padding: 0.8rem;
-  background: var(--danger);
+  background: var(--primary);
   color: white;
   border: none;
   border-radius: 8px;
@@ -922,12 +954,31 @@ input:checked + .slider:before {
   margin-top: 1rem;
 }
 
-.delete-account-btn:hover {
-  background: #c0392b;
-  transform: translateY(-2px);
+.add-payment-btn:hover {
+  background: var(--primary-dark);
 }
 
-.delete-modal-overlay {
+.payment-security-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(108, 92, 231, 0.05);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--gray);
+  line-height: 1.5;
+}
+
+.payment-security-note i {
+  color: var(--success);
+  font-size: 1.2rem;
+  margin-top: 0.2rem;
+}
+
+/* Modal de pago */
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -940,77 +991,79 @@ input:checked + .slider:before {
   z-index: 1000;
 }
 
-.delete-modal {
+.payment-modal {
   background: white;
-  padding: 2rem;
-  border-radius: 10px;
+  border-radius: 15px;
+  width: 100%;
   max-width: 500px;
-  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: fadeInUp 0.3s ease-out;
+  overflow: hidden;
 }
 
-.delete-modal h3 {
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.modal-header h3 {
+  font-size: 1.3rem;
+  color: var(--dark);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--gray);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.close-btn:hover {
   color: var(--danger);
-  margin-bottom: 1rem;
+  transform: rotate(90deg);
 }
 
-.delete-modal p {
-  margin-bottom: 1.5rem;
-  line-height: 1.5;
+.payment-form {
+  padding: 1.5rem;
 }
 
-.delete-confirmation {
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   margin: 1.5rem 0;
 }
 
-.delete-confirmation label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
+.form-checkbox input {
+  width: auto;
 }
 
-.delete-confirmation input {
-  width: 100%;
-  padding: 0.8rem;
-  border: 1px solid var(--danger);
-  border-radius: 6px;
-  font-family: 'Poppins', sans-serif;
-}
-
-.modal-actions {
+.security-note {
   display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--gray);
+  margin-bottom: 1.5rem;
 }
 
-.cancel-delete-btn {
-  padding: 0.8rem 1.5rem;
-  background: var(--light-gray);
-  color: var(--dark);
-  border: none;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.cancel-delete-btn:hover {
-  background: #d1d8dd;
-}
-
-.confirm-delete-btn {
-  padding: 0.8rem 1.5rem;
-  background: var(--danger);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.confirm-delete-btn:hover {
-  background: #c0392b;
+.security-note i {
+  color: var(--success);
+  font-size: 1.2rem;
 }
 
 /* Animaciones */
@@ -1055,5 +1108,21 @@ input:checked + .slider:before {
   .auctions-grid,
   .settings-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .payment-method {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .method-actions {
+    width: 100%;
+    margin-top: 1rem;
+    justify-content: flex-end;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 0;
   }
 }
