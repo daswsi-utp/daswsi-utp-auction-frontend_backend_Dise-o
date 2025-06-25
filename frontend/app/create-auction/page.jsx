@@ -14,20 +14,25 @@ export default function CreateAuctionPage() {
   const [initialPrice, setInitialPrice] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [shipping, setShipping] = useState(''); // Asegúrate de que 'shipping' sea un valor escalar
-  const [paymentMethods, setPaymentMethods] = useState(''); // Asegúrate de que 'paymentMethods' sea un valor escalar
+  const [shipping, setShipping] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('');
+  const [bankDetails, setBankDetails] = useState({
+    bankName: '',
+    accountNumber: '',
+    cci: ''
+  });
+  const [digitalWallet, setDigitalWallet] = useState({
+    phoneNumber: ''
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    const validFormats = ['image/jpeg', 'image/png']; // formatos de imagen válidos
+    const validFormats = ['image/jpeg', 'image/png'];
     const validFiles = files.filter(file => validFormats.includes(file.type));
 
-    // Añadir las imágenes nuevas a las imágenes existentes sin sobreescribirlas
     setImages(prevImages => [...prevImages, ...validFiles]);
-
-    // Crear las previsualizaciones de las imágenes añadidas
     setPreviews(prevPreviews => [
       ...prevPreviews,
       ...validFiles.map(f => URL.createObjectURL(f)),
@@ -47,24 +52,58 @@ export default function CreateAuctionPage() {
     setCategory(e.target.value);
   };
 
-  const handlePaymentMethodsChange = (e) => {
-    setPaymentMethods(e.target.value); // Cambié de 'e.target.value' a 'e.target.value' para ajustarlo como un valor único
+  const handleShippingChange = (e) => {
+    setShipping(e.target.value);
   };
 
-  const handleShippingChange = (e) => {
-    setShipping(e.target.value); // Asegúrate de que solo se maneje como una cadena, no como un array
+  const validateDates = () => {
+    const now = new Date();
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (start <= now) {
+      setError('La fecha de inicio debe ser en el futuro');
+      return false;
+    }
+
+    if (end <= start) {
+      setError('La fecha de fin debe ser posterior a la fecha de inicio');
+      return false;
+    }
+
+    return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    //Validacion de fechas
+    
     if (!validateDates()) {
-    setLoading(false);
-    return;
+      setLoading(false);
+      return;
     }
+
     try {
+      // Validar método de pago seleccionado
+      if (!paymentMethod) {
+        throw new Error('Debe seleccionar un método de pago');
+      }
+
+      // Preparar datos de pago
+      let paymentData = { method: paymentMethod };
+      if (paymentMethod === 'transferencia') {
+        if (!bankDetails.bankName || !bankDetails.accountNumber || !bankDetails.cci) {
+          throw new Error('Debe completar todos los datos bancarios');
+        }
+        paymentData.details = bankDetails;
+      } else if (paymentMethod === 'yape' || paymentMethod === 'plin') {
+        if (!digitalWallet.phoneNumber) {
+          throw new Error('Debe ingresar el número de teléfono');
+        }
+        paymentData.phoneNumber = digitalWallet.phoneNumber;
+      }
+
       const imageUrls = images.length ? await uploadImages(images) : [];
 
       const prodRes = await fetch('/api/products', {
@@ -77,9 +116,10 @@ export default function CreateAuctionPage() {
           base_price: basePrice,
           images: imageUrls,
           shipping,
-          payment_methods: paymentMethods,
+          payment_methods: paymentData
         })
       });
+
       if (!prodRes.ok) throw new Error('Error creando producto');
       const product = await prodRes.json();
 
@@ -93,6 +133,7 @@ export default function CreateAuctionPage() {
           end_date: endDate
         })
       });
+
       if (!aucRes.ok) throw new Error('Error creando subasta');
       const auction = await aucRes.json();
 
@@ -103,26 +144,6 @@ export default function CreateAuctionPage() {
     } finally {
       setLoading(false);
     }
-  };
-  
-  const validateDates = () => {
-    const now = new Date();
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    // Validación 1: Fecha de inicio debe ser en el futuro
-    if (start <= now) {
-      setError('La fecha de inicio debe ser en el futuro');
-      return false;
-    }
-
-    // Validación 2: Fecha de fin debe ser posterior a fecha de inicio
-    if (end <= start) {
-      setError('La fecha de fin debe ser posterior a la fecha de inicio');
-      return false;
-    }
-
-    return true;
   };
 
   return (
@@ -287,17 +308,79 @@ export default function CreateAuctionPage() {
                     <option value="Terrestre">Terrestre</option>
                   </select>
                 </div>
-                <div className="form-field">
-                  <label>Métodos de Pago</label>
-                  <select value={paymentMethods} onChange={handlePaymentMethodsChange} required>
-                    <option value="Efectivo">Efectivo</option>
-                    <option value="Tarjeta">Tarjetas de Crédito/Débito</option>
-                    <option value="Transferencia">Transferencias Bancarias</option>
-                    <option value="Monedero">Monederos Digitales</option>
-                  </select>
-                </div>
               </div>
             </div>
+
+            <div className="form-section">
+              <h2>Métodos de Pago Aceptados</h2>
+              
+              <div className="form-field">
+                <label>Seleccione su método de pago preferido</label>
+                <select
+                  value={paymentMethod}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  required
+                >
+                  <option value="">Seleccione un método</option>
+                  <option value="transferencia">Transferencia Bancaria</option>
+                  <option value="yape">Yape</option>
+                  <option value="plin">Plin</option>
+                </select>
+              </div>
+
+              {paymentMethod === 'transferencia' && (
+                <div className="payment-details">
+                  <div className="form-field">
+                    <label>Nombre del Banco</label>
+                    <input
+                      type="text"
+                      value={bankDetails.bankName}
+                      onChange={(e) => setBankDetails({...bankDetails, bankName: e.target.value})}
+                      placeholder="Ej: BCP, BBVA, Interbank"
+                      required
+                    />
+                  </div>
+                  <div className="form-field">
+                    <label>Número de Cuenta</label>
+                    <input
+                      type="text"
+                      value={bankDetails.accountNumber}
+                      onChange={(e) => setBankDetails({...bankDetails, accountNumber: e.target.value})}
+                      placeholder="Número de cuenta bancaria"
+                      required
+                    />
+                  </div>
+                  <div className="form-field">
+                    <label>CCI (Código de Cuenta Interbancario)</label>
+                    <input
+                      type="text"
+                      value={bankDetails.cci}
+                      onChange={(e) => setBankDetails({...bankDetails, cci: e.target.value})}
+                      placeholder="CCI de 20 dígitos"
+                      required
+                    />
+                  </div>
+                </div>
+              )}
+
+              {(paymentMethod === 'yape' || paymentMethod === 'plin') && (
+                <div className="payment-details">
+                  <div className="form-field">
+                    <label>Número de Teléfono {paymentMethod === 'yape' ? 'Yape' : 'Plin'}</label>
+                    <input
+                      type="tel"
+                      value={digitalWallet.phoneNumber}
+                      onChange={(e) => setDigitalWallet({
+                        phoneNumber: e.target.value
+                      })}
+                      placeholder="Ej: 987654321"
+                      required
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
             <button 
               type="submit" 
               className="submit-button"
