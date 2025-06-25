@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Header from '../componets/Header'; // Importa el componente Header
 import '../create-auction/create-auction.css';
 
 export default function CreateAuctionPage() {
@@ -14,20 +15,17 @@ export default function CreateAuctionPage() {
   const [initialPrice, setInitialPrice] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [shipping, setShipping] = useState(''); // Asegúrate de que 'shipping' sea un valor escalar
-  const [paymentMethods, setPaymentMethods] = useState(''); // Asegúrate de que 'paymentMethods' sea un valor escalar
+  const [shipping, setShipping] = useState('');
+  const [paymentMethods, setPaymentMethods] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    const validFormats = ['image/jpeg', 'image/png']; // formatos de imagen válidos
+    const validFormats = ['image/jpeg', 'image/png'];
     const validFiles = files.filter(file => validFormats.includes(file.type));
 
-    // Añadir las imágenes nuevas a las imágenes existentes sin sobreescribirlas
     setImages(prevImages => [...prevImages, ...validFiles]);
-
-    // Crear las previsualizaciones de las imágenes añadidas
     setPreviews(prevPreviews => [
       ...prevPreviews,
       ...validFiles.map(f => URL.createObjectURL(f)),
@@ -48,22 +46,23 @@ export default function CreateAuctionPage() {
   };
 
   const handlePaymentMethodsChange = (e) => {
-    setPaymentMethods(e.target.value); // Cambié de 'e.target.value' a 'e.target.value' para ajustarlo como un valor único
+    setPaymentMethods(e.target.value);
   };
 
   const handleShippingChange = (e) => {
-    setShipping(e.target.value); // Asegúrate de que solo se maneje como una cadena, no como un array
+    setShipping(e.target.value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    //Validacion de fechas
+    
     if (!validateDates()) {
-    setLoading(false);
-    return;
+      setLoading(false);
+      return;
     }
+    
     try {
       const imageUrls = images.length ? await uploadImages(images) : [];
 
@@ -110,13 +109,11 @@ export default function CreateAuctionPage() {
     const start = new Date(startDate);
     const end = new Date(endDate);
 
-    // Validación 1: Fecha de inicio debe ser en el futuro
     if (start <= now) {
       setError('La fecha de inicio debe ser en el futuro');
       return false;
     }
 
-    // Validación 2: Fecha de fin debe ser posterior a fecha de inicio
     if (end <= start) {
       setError('La fecha de fin debe ser posterior a la fecha de inicio');
       return false;
@@ -127,51 +124,7 @@ export default function CreateAuctionPage() {
 
   return (
     <div className="dashboard">
-      <header className="app-header">
-        <div className="top-bar">
-          <div className="top-bar-left">
-            <button className="menu-toggle">
-              <i className="fas fa-bars"></i>
-            </button>
-            <div className="search-box">
-              <i className="fas fa-search"></i>
-              <input type="text" placeholder="Buscar subastas..." />
-            </div>
-          </div>
-          <div className="top-bar-right">
-            <button className="notifications">
-              <i className="fas fa-bell"></i>
-              <span className="badge">5</span>
-            </button>
-            <button className="user-avatar">
-              <i className="fas fa-user-circle"></i>
-            </button>
-          </div>
-        </div>
-
-        <nav className="main-nav">
-          <div className="nav-brand">
-            <i className="fas fa-gavel"></i> SubastaYa
-          </div>
-          <div className="nav-tabs">
-            <button onClick={() => router.push('/')} className="nav-item">
-              <i className="fas fa-home"></i> Inicio
-            </button>
-            <button className="nav-item">
-              <i className="fas fa-search"></i> Buscar
-            </button>
-            <button className="nav-item active">
-              <i className="fas fa-plus-circle"></i> Crear Subasta
-            </button>
-            <button className="nav-item">
-              <i className="fas fa-heart"></i> Favoritos
-            </button>
-            <button className="nav-item">
-              <i className="fas fa-user"></i> Perfil
-            </button>
-          </div>
-        </nav>
-      </header>
+      <Header /> {/* Usamos el componente Header aquí */}
 
       <main className="main-content create-auction-content">
         <div className="auction-form-container">
