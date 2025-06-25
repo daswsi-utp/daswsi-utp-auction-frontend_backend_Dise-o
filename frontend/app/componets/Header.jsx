@@ -18,7 +18,6 @@ export default function Header() {
         </div>
         <div className="top-bar-right">
           <button className="notifications">
-            {/* Reemplazamos el icono FontAwesome por tu imagen */}
             <Image 
               src="/iconos/iconotifiacaiones.png" 
               alt="Notificaciones"
@@ -35,17 +34,21 @@ export default function Header() {
 
       <nav className="main-nav">
         <div className="nav-brand">
-          {/* Logo que redirige al home */}
+          {/* Logo personalizado que redirige al home */}
           <Link href="/" className="logo-link">
-            <i className="fas fa-gavel"></i> SubastaYa
+            <Image 
+              src="/iconos/logo-SUBASTA.png" 
+              alt="SubastaYa"
+              width={150} // Ajusta según el tamaño de tu logo
+              height={40} // Ajusta según el tamaño de tu logo
+              className="logo-image"
+            />
           </Link>
         </div>
         <div className="nav-tabs">
-          {/* Botón de inicio que redirige al home */}
           <Link href="/" className="nav-item active">
             <i className="fas fa-home"></i> Inicio
           </Link>
-          
           <button className="nav-item">
             <i className="fas fa-search"></i> Buscar
           </button>
