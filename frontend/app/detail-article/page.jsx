@@ -271,41 +271,7 @@ const DetalleArticle = ({ item, isOpen, toggleDetails }) => {
             </div>
           </div>
           
-          <div className="mt-8 pt-6 border-t">
-            <h4 className="text-xl font-semibold mb-4">Comentarios</h4>
-            
-            <div className="space-y-4 mb-6">
-              {comments.map((comment) => (
-                <div key={comment.id} className="bg-gray-50 p-4 rounded-lg">
-                  <div className="flex justify-between mb-2">
-                    <strong>{comment.author}</strong>
-                    <span className="text-gray-500 text-sm">{comment.date}</span>
-                  </div>
-                  <p>{comment.text}</p>
-                </div>
-              ))}
-            </div>
-            
-            <form onSubmit={handleCommentSubmit} className="bg-white border border-gray-200 rounded-lg p-4">
-              <h5 className="font-semibold mb-3">Deja tu comentario</h5>
-              <textarea
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                rows="3"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mb-3"
-                placeholder="Escribe tu comentario o pregunta aquí..."
-                required
-              />
-              <button
-                type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded inline-flex items-center"
-              >
-                <FaPaperPlane className="mr-2" />
-                Enviar Comentario
-              </button>
-            </form>
-          </div>
-        </div>
+           </div>
       </div>
     </div>
   );
