@@ -13,7 +13,6 @@ function Profile() {
     address: 'Calle Falsa 123',
     country: 'AR',
     zipcode: 'C1425',
-    registrationDate: '15/03/2023',
     profileImage: '/default-profile.jpg'
   });
 
@@ -29,33 +28,89 @@ function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [notificationSettings] = useState({
     email: true,
-    push: true,
-    sms: false,
     bidActivity: true,
-    auctionEnding: true,
-    promotions: false
+    auctionEnding: true
   });
-  const [reputationData] = useState({
-    rating: 4.8,
-    reviews: [
-      {
-        id: 1,
-        user: 'María González',
-        rating: 5,
-        comment: 'Excelente comprador, pago rápido y buena comunicación.',
-        date: '15/05/2023',
-        auction: 'Reloj Vintage'
-      }
-    ]
+
+  // Estados para métodos de pago
+  const [paymentMethods, setPaymentMethods] = useState([
+    {
+      type: 'credit_card',
+      cardNumber: '4242424242424242',
+      cardName: 'Juan Pérez',
+      expiryDate: '12/25',
+      cvv: '123',
+      isDefault: true
+    }
+  ]);
+  const [showAddPaymentModal, setShowAddPaymentModal] = useState(false);
+  const [newPaymentMethod, setNewPaymentMethod] = useState({
+    type: 'credit_card',
+    cardNumber: '',
+    cardName: '',
+    expiryDate: '',
+    cvv: '',
+    isDefault: false
   });
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  // Funciones para métodos de pago
+  const handleAddPaymentMethod = () => {
+    // Validación básica
+    if (!newPaymentMethod.cardNumber || !newPaymentMethod.cardName || !newPaymentMethod.expiryDate || !newPaymentMethod.cvv) {
+      alert('Por favor completa todos los campos');
+      return;
+    }
+
+    // Si es el primer método, lo establece como predeterminado
+    const isFirstMethod = paymentMethods.length === 0;
+    const methodToAdd = {
+      ...newPaymentMethod,
+      isDefault: isFirstMethod || newPaymentMethod.isDefault
+    };
+
+    // Si se marca como predeterminado, quita el predeterminado anterior
+    const updatedMethods = methodToAdd.isDefault 
+      ? paymentMethods.map(method => ({ ...method, isDefault: false }))
+      : [...paymentMethods];
+
+    setPaymentMethods([...updatedMethods, methodToAdd]);
+    setShowAddPaymentModal(false);
+    setNewPaymentMethod({
+      type: 'credit_card',
+      cardNumber: '',
+      cardName: '',
+      expiryDate: '',
+      cvv: '',
+      isDefault: false
+    });
+  };
+
+  const handleRemovePaymentMethod = (index) => {
+    const methodToRemove = paymentMethods[index];
+    const updatedMethods = [...paymentMethods];
+    updatedMethods.splice(index, 1);
+
+    // Si se eliminó el método predeterminado y hay otros métodos, establecer el primero como predeterminado
+    if (methodToRemove.isDefault && updatedMethods.length > 0) {
+      updatedMethods[0].isDefault = true;
+    }
+
+    setPaymentMethods(updatedMethods);
+  };
+
+  const setDefaultPaymentMethod = (index) => {
+    const updatedMethods = paymentMethods.map((method, i) => ({
+      ...method,
+      isDefault: i === index
+    }));
+    setPaymentMethods(updatedMethods);
+  };
 
   // Funciones de placeholder (sin lógica real)
   const handleEditClick = () => setIsEditing(!isEditing);
   const handleSaveClick = () => setIsEditing(false);
   const handleCancelClick = () => setIsEditing(false);
   const handleTabChange = (tab) => setActiveTab(tab);
-  const handleDeleteClick = () => alert('Eliminar cuenta - Esta funcionalidad se conectará al backend');
   const handleNotificationChange = () => alert('Configuración de notificaciones cambiada');
   const handleSecuritySubmit = (e) => {
     e.preventDefault();
@@ -73,6 +128,13 @@ function Profile() {
       'UY': 'Uruguay', 'VE': 'Venezuela'
     };
     return countries[code] || code;
+  };
+
+  // Función para formatear el número de tarjeta
+  const formatCardNumber = (number) => {
+    if (!number) return '**** **** **** ****';
+    const lastFour = number.slice(-4);
+    return `**** **** **** ${lastFour}`;
   };
 
   return (
@@ -97,7 +159,6 @@ function Profile() {
             )}
           </div>
           <h1 className="profile-name">{userData.name}</h1>
-          <p className="profile-member-since">Miembro desde {userData.registrationDate}</p>
         </div>
         
         <div className="profile-stats">
@@ -108,10 +169,6 @@ function Profile() {
           <div className="stat-item">
             <div className="stat-number">5</div>
             <div className="stat-title">Ganadas</div>
-          </div>
-          <div className="stat-item">
-            <div className="stat-number">4.8</div>
-            <div className="stat-title">Rating</div>
           </div>
         </div>
       </div>
@@ -240,7 +297,6 @@ function Profile() {
               </div>
             ) : (
               <div className="info-grid">
-                {/* Información personal completa */}
                 <div className="info-item">
                   <div className="info-icon">
                     <i className="fas fa-user"></i>
@@ -298,16 +354,6 @@ function Profile() {
                   <div>
                     <div className="info-label">Código postal</div>
                     <div className="info-value">{userData.zipcode}</div>
-                  </div>
-                </div>
-                
-                <div className="info-item">
-                  <div className="info-icon">
-                    <i className="fas fa-calendar-alt"></i>
-                  </div>
-                  <div>
-                    <div className="info-label">Miembro desde</div>
-                    <div className="info-value">{userData.registrationDate}</div>
                   </div>
                 </div>
               </div>
@@ -428,7 +474,7 @@ function Profile() {
                 
                 <div className="notification-settings">
                   <div className="notification-group">
-                    <h4>Métodos de notificación</h4>
+                    <h4>Tipos de notificación</h4>
                     <div className="notification-item">
                       <label className="switch">
                         <input 
@@ -441,34 +487,6 @@ function Profile() {
                       </label>
                       <span>Correo electrónico</span>
                     </div>
-                    <div className="notification-item">
-                      <label className="switch">
-                        <input 
-                          type="checkbox" 
-                          name="push" 
-                          checked={notificationSettings.push} 
-                          onChange={handleNotificationChange} 
-                        />
-                        <span className="slider round"></span>
-                      </label>
-                      <span>Notificaciones push</span>
-                    </div>
-                    <div className="notification-item">
-                      <label className="switch">
-                        <input 
-                          type="checkbox" 
-                          name="sms" 
-                          checked={notificationSettings.sms} 
-                          onChange={handleNotificationChange} 
-                        />
-                        <span className="slider round"></span>
-                      </label>
-                      <span>Mensajes SMS</span>
-                    </div>
-                  </div>
-                  
-                  <div className="notification-group">
-                    <h4>Tipos de notificación</h4>
                     <div className="notification-item">
                       <label className="switch">
                         <input 
@@ -493,18 +511,6 @@ function Profile() {
                       </label>
                       <span>Subastas por finalizar</span>
                     </div>
-                    <div className="notification-item">
-                      <label className="switch">
-                        <input 
-                          type="checkbox" 
-                          name="promotions" 
-                          checked={notificationSettings.promotions} 
-                          onChange={handleNotificationChange} 
-                        />
-                        <span className="slider round"></span>
-                      </label>
-                      <span>Promociones y ofertas</span>
-                    </div>
                   </div>
                   
                   <button className="save-notifications-btn" onClick={handleNotificationChange}>
@@ -512,105 +518,165 @@ function Profile() {
                   </button>
                 </div>
               </div>
-              
-              {/* Reputación */}
+
+              {/* Sección de Métodos de Pago */}
               <div className="setting-card">
                 <div className="setting-icon">
-                  <i className="fas fa-star"></i>
+                  <i className="fas fa-credit-card"></i>
                 </div>
-                <h3 className="setting-title">Reputación</h3>
-                <p className="setting-description">Revisa tus valoraciones y comentarios</p>
+                <h3 className="setting-title">Métodos de Pago</h3>
+                <p className="setting-description">Administra tus métodos de pago para compras y subastas</p>
                 
-                <div className="reputation-summary">
-                  <div className="rating-display">
-                    <div className="rating-value">{reputationData.rating}</div>
-                    <div className="stars">
-                      {[...Array(5)].map((_, i) => (
-                        <i 
-                          key={i} 
-                          className={`fas fa-star ${i < Math.floor(reputationData.rating) ? 'filled' : ''}`}
-                        ></i>
-                      ))}
-                    </div>
-                    <div className="rating-count">{reputationData.reviews.length} valoraciones</div>
-                  </div>
-                  
-                  <div className="reviews-list">
-                    {reputationData.reviews.map(review => (
-                      <div key={review.id} className="review-item">
-                        <div className="review-header">
-                          <div className="review-user">{review.user}</div>
-                          <div className="review-rating">
-                            {[...Array(5)].map((_, i) => (
-                              <i 
-                                key={i} 
-                                className={`fas fa-star ${i < review.rating ? 'filled' : ''}`}
-                              ></i>
-                            ))}
-                          </div>
-                          <div className="review-date">{review.date}</div>
+                {paymentMethods.length > 0 ? (
+                  <div className="payment-methods-list">
+                    {paymentMethods.map((method, index) => (
+                      <div key={index} className={`payment-method ${method.isDefault ? 'default' : ''}`}>
+                        <div className="method-icon">
+                          <i className={`fab fa-${method.type === 'credit_card' ? 'cc-visa' : 'cc-mastercard'}`}></i>
                         </div>
-                        <div className="review-auction">Subasta: {review.auction}</div>
-                        <div className="review-comment">{review.comment}</div>
+                        <div className="method-details">
+                          <div className="method-type">
+                            {method.type === 'credit_card' ? 'Tarjeta de crédito' : 'Tarjeta de débito'} 
+                            {method.isDefault && <span className="default-badge">Predeterminado</span>}
+                          </div>
+                          <div className="method-number">{formatCardNumber(method.cardNumber)}</div>
+                          <div className="method-name">{method.cardName}</div>
+                        </div>
+                        <div className="method-actions">
+                          {!method.isDefault && (
+                            <button 
+                              onClick={() => setDefaultPaymentMethod(index)}
+                              className="set-default-btn"
+                            >
+                              Establecer predeterminado
+                            </button>
+                          )}
+                          <button 
+                            onClick={() => handleRemovePaymentMethod(index)}
+                            className="remove-btn"
+                          >
+                            <i className="fas fa-trash"></i>
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>
-                </div>
-              </div>
-              
-              {/* Eliminar Cuenta */}
-              <div className="setting-card danger">
-                <div className="setting-icon">
-                  <i className="fas fa-exclamation-triangle"></i>
-                </div>
-                <h3 className="setting-title">Eliminar Cuenta</h3>
-                <p className="setting-description">Elimina permanentemente tu cuenta</p>
-                
-                <button 
-                  className="delete-account-btn"
-                  onClick={() => setDeleteModalOpen(true)}
-                >
-                  <i className="fas fa-trash-alt"></i> Eliminar Cuenta
-                </button>
-                
-                {deleteModalOpen && (
-                  <div className="delete-modal-overlay">
-                    <div className="delete-modal">
-                      <h3>¿Estás seguro de eliminar tu cuenta?</h3>
-                      <p>Esta acción es irreversible. Todos tus datos, subastas e historial serán eliminados permanentemente.</p>
-                      
-                      <div className="delete-confirmation">
-                        <label>
-                          Escribe <strong>"ELIMINAR"</strong> para confirmar:
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="ELIMINAR"
-                        />
-                      </div>
-                      
-                      <div className="modal-actions">
-                        <button 
-                          className="cancel-delete-btn"
-                          onClick={() => setDeleteModalOpen(false)}
-                        >
-                          Cancelar
-                        </button>
-                        <button 
-                          className="confirm-delete-btn"
-                          onClick={handleDeleteClick}
-                        >
-                          Eliminar Permanentemente
-                        </button>
-                      </div>
-                    </div>
+                ) : (
+                  <div className="empty-payment-methods">
+                    <i className="far fa-credit-card empty-icon"></i>
+                    <p>No has añadido ningún método de pago</p>
                   </div>
                 )}
+                
+                <button 
+                  onClick={() => setShowAddPaymentModal(true)}
+                  className="add-payment-btn"
+                >
+                  <i className="fas fa-plus"></i> Añadir método de pago
+                </button>
+                
+                <div className="payment-security-note">
+                  <i className="fas fa-shield-alt"></i>
+                  <span>Tu información de pago está protegida. Nos hemos asociado con Stripe, uno de los procesadores de pagos más seguros y de mejor reputación que existen.</span>
+                </div>
               </div>
             </div>
           </div>
         )}
       </div>
+
+      {/* Modal para añadir método de pago */}
+      {showAddPaymentModal && (
+        <div className="modal-overlay">
+          <div className="payment-modal">
+            <div className="modal-header">
+              <h3>Añadir Método de Pago</h3>
+              <button onClick={() => setShowAddPaymentModal(false)} className="close-btn">
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            
+            <div className="payment-form">
+              <div className="form-group">
+                <label>Tipo de tarjeta</label>
+                <select 
+                  value={newPaymentMethod.type}
+                  onChange={(e) => setNewPaymentMethod({...newPaymentMethod, type: e.target.value})}
+                >
+                  <option value="credit_card">Tarjeta de crédito</option>
+                  <option value="debit_card">Tarjeta de débito</option>
+                </select>
+              </div>
+              
+              <div className="form-group">
+                <label>Número de tarjeta</label>
+                <input
+                  type="text"
+                  placeholder="1234 5678 9012 3456"
+                  value={newPaymentMethod.cardNumber}
+                  onChange={(e) => setNewPaymentMethod({...newPaymentMethod, cardNumber: e.target.value})}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Nombre en la tarjeta</label>
+                <input
+                  type="text"
+                  placeholder="Juan Pérez"
+                  value={newPaymentMethod.cardName}
+                  onChange={(e) => setNewPaymentMethod({...newPaymentMethod, cardName: e.target.value})}
+                />
+              </div>
+              
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Fecha de expiración</label>
+                  <input
+                    type="text"
+                    placeholder="MM/AA"
+                    value={newPaymentMethod.expiryDate}
+                    onChange={(e) => setNewPaymentMethod({...newPaymentMethod, expiryDate: e.target.value})}
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label>CVV</label>
+                  <input
+                    type="text"
+                    placeholder="123"
+                    value={newPaymentMethod.cvv}
+                    onChange={(e) => setNewPaymentMethod({...newPaymentMethod, cvv: e.target.value})}
+                  />
+                </div>
+              </div>
+              
+              <div className="form-checkbox">
+                <input
+                  type="checkbox"
+                  id="defaultPayment"
+                  checked={newPaymentMethod.isDefault}
+                  onChange={(e) => setNewPaymentMethod({...newPaymentMethod, isDefault: e.target.checked})}
+                />
+                <label htmlFor="defaultPayment">Establecer como método de pago predeterminado</label>
+              </div>
+              
+              <div className="security-note">
+                <i className="fas fa-lock"></i>
+                <span>Tu información de pago está protegida. Usamos cifrado SSL para mantener tus datos seguros.</span>
+              </div>
+              
+              <div className="form-actions">
+                <button onClick={() => setShowAddPaymentModal(false)} className="cancel-btn">
+                  Cancelar
+                </button>
+                <button onClick={handleAddPaymentMethod} className="save-btn">
+                  Guardar Tarjeta
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
