@@ -34,13 +34,12 @@ export default function Header() {
 
       <nav className="main-nav">
         <div className="nav-brand">
-          {/* Logo personalizado que redirige al home */}
           <Link href="/" className="logo-link">
             <Image 
               src="/iconos/logo-SUBASTA.png" 
               alt="SubastaYa"
-              width={150} // Ajusta según el tamaño de tu logo
-              height={40} // Ajusta según el tamaño de tu logo
+              width={150}
+              height={40}
               className="logo-image"
             />
           </Link>
