@@ -3,7 +3,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import '../../styles/login.css'; // Importa el archivo CSS
+import '../../styles/login1.css'; // Importa el archivo CSS
 
 function Register() {
   return (

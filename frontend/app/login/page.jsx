@@ -1,206 +1,88 @@
-'use client';
+'use client'; // Indica que este componente debe ejecutarse solo en el cliente
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import '../app/styles/dashboard.css';
-import DetalleArticle from './detail-article/page';
+import '../styles/login1.css';
 
-export default function Homepage() {
-  const [selectedItem, setSelectedItem] = useState(null);
+function Login() {
+  const [screen, setScreen] = useState('welcome'); // Estado para manejar las pantallas
 
-  const items = [
-    {
-      title: 'Smartphone Premium 256GB',
-      subtitle: 'Último Modelo',
-      imageUrl: 'https://cdn.pixabay.com/photo/2016/11/29/12/30/phone-1869510_960_720.jpg',
-      price: '1799.00',
-      bids: 5,
-      description: 'Este es un smartphone de última generación, con 256GB de almacenamiento y una cámara increíble.',
-    },
-    {
-      title: 'Tablet Android 10"',
-      subtitle: 'Perfecta para Estudiantes',
-      imageUrl: 'https://cdn.pixabay.com/photo/2016/03/27/19/43/samsung-1283938_960_720.jpg',
-      price: '650.00',
-      bids: 5,
-      description: 'Una tablet Android de 10", ideal para estudiar y entretenimiento.',
-    },
-  ];
+  const showScreen = (screenName) => {
+    setScreen(screenName); // Cambia la pantalla activa
+  };
 
   return (
-    <div className="dashboard">
-      <header className="app-header">
-        <div className="top-bar">
-          <div className="top-bar-left">
-            <button className="menu-toggle">
-              <i className="fas fa-bars"></i>
-            </button>
-            <div className="search-box">
-              <i className="fas fa-search"></i>
-              <input type="text" placeholder="Buscar subastas..." />
+    <div className="auth-container">
+      {/* Pantalla de Bienvenida */}
+      {screen === 'welcome' && (
+        <div id="welcome-screen" className="screen active">
+          <div className="auth-header">
+            <div className="auth-logo">
+              <i className="fas fa-gavel text-5xl text-indigo-600"></i>
             </div>
+            <h1 className="auth-title text-2xl">Bienvenido a la Plataforma de Subastas</h1>
           </div>
-          <div className="top-bar-right">
-            <button className="notifications">
-              <i className="fas fa-bell"></i>
-              <span className="badge">5</span>
+          <div className="flex flex-col gap-4">
+            <button
+              onClick={() => showScreen('login')}
+              className="auth-btn auth-btn-primary w-full"
+            >
+              Iniciar Sesión
             </button>
-            <button className="user-avatar">
-              <i className="fas fa-user-circle"></i>
-            </button>
+            <Link href="/login/register" passHref>
+              <button className="auth-btn auth-btn-secondary w-full">
+                Registrarse
+              </button>
+            </Link>
           </div>
         </div>
+      )}
 
-        <nav className="main-nav">
-          <div className="nav-brand">
-            <i className="fas fa-gavel"></i> SubastaYa
+      {/* Pantalla de Iniciar Sesión */}
+      {screen === 'login' && (
+        <div id="login-screen" className="screen active">
+          <div className="auth-header">
+            <div className="auth-logo">
+              <i className="fas fa-user-lock text-5xl text-indigo-600"></i>
+            </div>
+            <h1 className="auth-title text-2xl">Iniciar Sesión</h1>
+            <p className="auth-subtitle">Accede a tu cuenta</p>
           </div>
-          <div className="nav-tabs">
-            <button className="active">
-              <i className="fas fa-home"></i> Inicio
-            </button>
-            <button>
-              <i className="fas fa-search"></i> Buscar
-            </button>
-            <Link href="/create-auction" className="create-auction-btn">
-              <i className="fas fa-plus-circle"></i> Crear Subasta
+          <form>
+            <div className="form-group">
+              <input
+                type="email"
+                className="auth-input"
+                placeholder="Correo electrónico"
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="password"
+                className="auth-input"
+                placeholder="Contraseña"
+              />
+            </div>
+            <div className="form-group">
+              <button type="submit" className="auth-btn auth-btn-primary w-full">
+                Iniciar sesión
+              </button>
+            </div>
+          </form>
+          <div className="form-help">
+            <Link href="/login/forgot-password">¿Olvidaste tu contraseña?</Link>
+          </div>
+          <div className="form-help">
+            <Link href="/login/register">
+              <button className="auth-btn auth-btn-secondary w-full">
+                Regístrate aquí
+              </button>
             </Link>
-            <button>
-              <i className="fas fa-heart"></i> Favoritos
-            </button>
-            <Link href="/login/profile" className="profile-btn">
-              <i className="fas fa-user"></i> Perfil
-            </Link>
           </div>
-        </nav>
-      </header>
-
-      <div className="quick-filters">
-        <button className="filter-btn active">Todos</button>
-        <button className="filter-btn">Electrónica</button>
-        <button className="filter-btn">Arte</button>
-        <button className="filter-btn">Coleccionables</button>
-        <button className="filter-btn">Vehículos</button>
-        <button className="filter-btn">Inmuebles</button>
-        <button className="filter-btn">Moda</button>
-      </div>
-
-      <main className="main-content">
-        <section className="auction-section">
-          <div className="section-header">
-            <h2>Subastas Destacadas</h2>
-            <button className="see-all">Ver todo</button>
-          </div>
-          
-          <div className="auctions-grid">
-            <div className="auction-card" onClick={() => setSelectedItem(items[0])}>
-              <div className="auction-badge">Destacado</div>
-              <img src="https://cdn.pixabay.com/photo/2016/11/29/12/30/phone-1869510_960_720.jpg" alt="Smartphone" />
-              <div className="auction-info">
-                <h3>Smartphone Premium 256GB</h3>
-                <p className="subtitle">Último Modelo</p>
-                <div className="price-section">
-                  <span className="price">S/ 1,799.00</span>
-                  <span className="bids">5 pujas</span>
-                </div>
-                <div className="auction-footer">
-                  <span className="seller"><i className="fas fa-user"></i> TechSeller123</span>
-                  <span className="time"><i className="fas fa-clock"></i> 4h 23m</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="auction-card" onClick={() => setSelectedItem(items[1])}>
-              <img src="https://cdn.pixabay.com/photo/2016/03/27/19/43/samsung-1283938_960_720.jpg" alt="Tablet" />
-              <div className="auction-info">
-                <h3>Tablet Android 10"</h3>
-                <p className="subtitle">Perfecta para Estudiantes</p>
-                <div className="price-section">
-                  <span className="price">S/ 650.00</span>
-                  <span className="bids">5 pujas</span>
-                </div>
-                <div className="auction-footer">
-                  <span className="seller"><i className="fas fa-user"></i> ElectroDeals</span>
-                  <span className="time"><i className="fas fa-clock"></i> 1d 12h</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="auction-section">
-          <div className="section-header">
-            <h2>Finalizando Pronto</h2>
-            <button className="see-all">Ver todo</button>
-          </div>
-          
-          <div className="auctions-grid">
-            <div className="auction-card">
-              <img src="https://cdn.pixabay.com/photo/2018/01/28/21/14/lens-3114729_960_720.jpg" alt="Lente" />
-              <div className="auction-info">
-                <h3>Lente Profesional 50mm</h3>
-                <p className="subtitle">f/1.4 para Cámaras DSLR</p>
-                <div className="price-section">
-                  <span className="price">S/ 1,250.00</span>
-                  <span className="bids">5 pujas</span>
-                </div>
-                <div className="auction-footer">
-                  <span className="seller"><i className="fas fa-user"></i> FotoExperto</span>
-                  <span className="time ending-soon"><i className="fas fa-clock"></i> 35m</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="auction-card">
-              <img src="https://cdn.pixabay.com/photo/2016/03/27/07/12/apple-watch-1282242_960_720.jpg" alt="Smartwatch" />
-              <div className="auction-info">
-                <h3>Smartwatch Multifunción</h3>
-                <p className="subtitle">Con Seguimiento de Actividad</p>
-                <div className="price-section">
-                  <span className="price">S/ 450.00</span>
-                  <span className="bids">5 pujas</span>
-                </div>
-                <div className="auction-footer">
-                  <span className="seller"><i className="fas fa-user"></i> WearableTech</span>
-                  <span className="time ending-soon"><i className="fas fa-clock"></i> 18m</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        
-        <section className="auction-section">
-          <div className="section-header">
-            <h2>Subastas Destacadas</h2>
-            <button className="see-all">Ver todo</button>
-          </div>
-
-          <div className="auctions-grid">
-            {items.map((item, index) => (
-              <div key={index} className="auction-card" onClick={() => setSelectedItem(item)}>
-                <div className="auction-badge">Destacado</div>
-                <img src={item.imageUrl} alt={item.title} />
-                <div className="auction-info">
-                  <h3>{item.title}</h3>
-                  <p className="subtitle">{item.subtitle}</p>
-                  <div className="price-section">
-                    <span className="price">S/ {item.price}</span>
-                    <span className="bids">{item.bids} pujas</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      </main>
-
-      {selectedItem && (
-        <DetalleArticle 
-          item={selectedItem} 
-          isOpen={Boolean(selectedItem)} 
-          toggleDetails={() => setSelectedItem(null)} 
-        />
+        </div>
       )}
     </div>
   );
 }
+
+export default Login;

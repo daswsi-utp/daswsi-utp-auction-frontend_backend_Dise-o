@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import '../app/styles/login.css';
+import '../app/styles/global.css';
 import DetalleArticle from './detail-article/page';
 
 export default function Homepage() {
@@ -68,6 +68,7 @@ export default function Homepage() {
             <button>
               <i className="fas fa-heart"></i> Favoritos
             </button>
+            
             <Link href="/login/profile" className="profile-btn">
               <i className="fas fa-user"></i> Perfil
             </Link>

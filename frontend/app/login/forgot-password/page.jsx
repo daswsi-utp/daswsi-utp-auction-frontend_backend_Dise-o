@@ -3,7 +3,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import '../../styles/login.css';
+import '../../styles/login1.css';
 
 function ForgotPassword() {
   return (
