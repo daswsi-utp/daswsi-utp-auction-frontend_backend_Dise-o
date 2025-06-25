@@ -1,0 +1,149 @@
+/* app/login/login1.css */
+
+/* Definición de colores */
+:root {
+  --primary: #6c5ce7;
+  --primary-dark: #5649c0;
+  --secondary: #00cec9;
+  --success: #00b894;
+  --danger: #d63031;
+  --warning: #fdcb6e;
+  --info: #0984e3;
+  --light: #f5f6fa;
+  --dark: #2d3436;
+  --gray: #636e72;
+  --light-gray: #dfe6e9;
+  --white: #ffffff;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+/* Reseteo de estilos */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f9f9f9;
+  color: var(--dark);
+}
+
+/* Contenedor principal */
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: var(--light);
+}
+
+/* Cabecera */
+.auth-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.auth-logo {
+  margin-bottom: 10px;
+}
+
+.auth-title {
+  font-size: 2.5rem;
+  color: var(--dark);
+  margin-bottom: 5px;
+}
+
+.auth-subtitle {
+  font-size: 1rem;
+  color: var(--gray);
+  margin-bottom: 20px;
+}
+
+/* Inputs y botones */
+.auth-input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid var(--light-gray);
+  font-size: 1rem;
+  background-color: var(--white);
+  transition: var(--transition);
+}
+
+.auth-input:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.auth-btn-primary {
+  background-color: var(--primary);
+  color: var(--white);
+  border: none;
+}
+
+.auth-btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+
+.auth-btn-secondary {
+  background-color: var(--light);
+  color: var(--dark);
+  border: none;
+}
+
+.auth-btn-secondary:hover {
+  background-color: var(--light-gray);
+  color: var(--primary);
+}
+
+/* Ayuda */
+.form-help {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--gray);
+}
+
+.form-help a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.form-help a:hover {
+  text-decoration: underline;
+}
+
+/* Pantallas */
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .auth-title {
+    font-size: 2rem;
+  }
+
+  .auth-btn {
+    font-size: 1rem;
+  }
+}
