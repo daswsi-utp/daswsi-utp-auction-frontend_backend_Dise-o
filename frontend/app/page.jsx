@@ -1,13 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-<<<<<<< HEAD
 import Link from 'next/link';
 import '../app/styles/global.css';
-=======
-import Header from './componets/Header';
-import '../app/styles/login.css';
->>>>>>> ee8c8e40eb07a7d67aa9a7adf01e7fb55a750dd7
 import DetalleArticle from './detail-article/page';
 
 export default function Homepage() {
@@ -34,7 +29,6 @@ export default function Homepage() {
 
   return (
     <div className="dashboard">
-<<<<<<< HEAD
       <header className="app-header">
         <div className="top-bar">
           <div className="top-bar-left">
@@ -81,9 +75,6 @@ export default function Homepage() {
           </div>
         </nav>
       </header>
-=======
-      <Header />
->>>>>>> ee8c8e40eb07a7d67aa9a7adf01e7fb55a750dd7
 
       <div className="quick-filters">
         <button className="filter-btn active">Todos</button>
