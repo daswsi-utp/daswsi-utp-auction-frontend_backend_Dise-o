@@ -59,6 +59,11 @@ export default function CreateAuctionPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    //Validacion de fechas
+    if (!validateDates()) {
+    setLoading(false);
+    return;
+    }
     try {
       const imageUrls = images.length ? await uploadImages(images) : [];
 
@@ -98,6 +103,26 @@ export default function CreateAuctionPage() {
     } finally {
       setLoading(false);
     }
+  };
+  
+  const validateDates = () => {
+    const now = new Date();
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // Validación 1: Fecha de inicio debe ser en el futuro
+    if (start <= now) {
+      setError('La fecha de inicio debe ser en el futuro');
+      return false;
+    }
+
+    // Validación 2: Fecha de fin debe ser posterior a fecha de inicio
+    if (end <= start) {
+      setError('La fecha de fin debe ser posterior a la fecha de inicio');
+      return false;
+    }
+
+    return true;
   };
 
   return (
@@ -273,7 +298,6 @@ export default function CreateAuctionPage() {
                 </div>
               </div>
             </div>
-
             <button 
               type="submit" 
               className="submit-button"
