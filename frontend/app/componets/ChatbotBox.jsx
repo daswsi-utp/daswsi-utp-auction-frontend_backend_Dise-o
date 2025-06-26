@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 
 export default function ChatbotBox() {
+  const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     { sender: 'Chatbot', content: '¡Hola! ¿En qué puedo ayudarte hoy?' },
   ]);
@@ -41,33 +42,58 @@ export default function ChatbotBox() {
   }, [messages]);
 
   return (
-    <div style={styles.container}>
-      <div style={styles.chatBox} ref={chatRef}>
-        {messages.map((msg, idx) => (
-          <div key={idx} style={msg.sender === 'Tú' ? styles.userMsg : styles.botMsg}>
-            <strong>{msg.sender}: </strong>{msg.content}
+    <>
+      {/* Botón flotante para abrir/cerrar */}
+      <button style={styles.floatingButton} onClick={() => setIsOpen(!isOpen)}>
+        {isOpen ? '✖' : '🤖'}
+      </button>
+
+      {/* Ventana del chat */}
+      {isOpen && (
+        <div style={styles.container}>
+          <div style={styles.chatBox} ref={chatRef}>
+            {messages.map((msg, idx) => (
+              <div key={idx} style={msg.sender === 'Tú' ? styles.userMsg : styles.botMsg}>
+                <strong>{msg.sender}: </strong>{msg.content}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div style={styles.inputSection}>
-        <input
-          type="text"
-          value={input}
-          placeholder="Escribe tu mensaje..."
-          onChange={(e) => setInput(e.target.value)}
-          style={styles.input}
-          onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-        />
-        <button onClick={sendMessage} style={styles.button}>Enviar</button>
-      </div>
-    </div>
+          <div style={styles.inputSection}>
+            <input
+              type="text"
+              value={input}
+              placeholder="Escribe tu mensaje..."
+              onChange={(e) => setInput(e.target.value)}
+              style={styles.input}
+              onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+            />
+            <button onClick={sendMessage} style={styles.button}>Enviar</button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
 const styles = {
-  container: {
+  floatingButton: {
     position: 'fixed',
     bottom: 20,
+    right: 20,
+    zIndex: 1001,
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    border: 'none',
+    borderRadius: '50%',
+    width: 60,
+    height: 60,
+    fontSize: 24,
+    boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+    cursor: 'pointer',
+  },
+  container: {
+    position: 'fixed',
+    bottom: 90,
     right: 20,
     width: 320,
     backgroundColor: 'white',
