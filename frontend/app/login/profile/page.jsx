@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import '../profile/profile.css';
+import Notificaciones from '../../notifications/page';
 
 function Profile() {
   // Estados para los datos del usuario
@@ -26,10 +27,14 @@ function Profile() {
   // Estados para la interfaz
   const [activeTab, setActiveTab] = useState('info');
   const [isEditing, setIsEditing] = useState(false);
-  const [notificationSettings] = useState({
+  
+  // Estado para notificaciones
+  const [notificationSettings, setNotificationSettings] = useState({
     email: true,
     bidActivity: true,
-    auctionEnding: true
+    auctionEnding: true,
+    push: true,
+    payment: true
   });
 
   // Estados para métodos de pago
@@ -53,22 +58,27 @@ function Profile() {
     isDefault: false
   });
 
+  // Estados para seguridad
+  const [securityData, setSecurityData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+    twoFactorAuth: false
+  });
+
   // Funciones para métodos de pago
   const handleAddPaymentMethod = () => {
-    // Validación básica
     if (!newPaymentMethod.cardNumber || !newPaymentMethod.cardName || !newPaymentMethod.expiryDate || !newPaymentMethod.cvv) {
       alert('Por favor completa todos los campos');
       return;
     }
 
-    // Si es el primer método, lo establece como predeterminado
     const isFirstMethod = paymentMethods.length === 0;
     const methodToAdd = {
       ...newPaymentMethod,
       isDefault: isFirstMethod || newPaymentMethod.isDefault
     };
 
-    // Si se marca como predeterminado, quita el predeterminado anterior
     const updatedMethods = methodToAdd.isDefault 
       ? paymentMethods.map(method => ({ ...method, isDefault: false }))
       : [...paymentMethods];
@@ -90,7 +100,6 @@ function Profile() {
     const updatedMethods = [...paymentMethods];
     updatedMethods.splice(index, 1);
 
-    // Si se eliminó el método predeterminado y hay otros métodos, establecer el primero como predeterminado
     if (methodToRemove.isDefault && updatedMethods.length > 0) {
       updatedMethods[0].isDefault = true;
     }
@@ -106,18 +115,65 @@ function Profile() {
     setPaymentMethods(updatedMethods);
   };
 
-  // Funciones de placeholder (sin lógica real)
+  // Funciones para notificaciones
+  const handleNotificationChange = (e) => {
+    const { name, checked } = e.target;
+    setNotificationSettings(prev => ({
+      ...prev,
+      [name]: checked
+    }));
+  };
+
+  const saveNotificationSettings = async () => {
+    try {
+      // Simular llamada a API
+      console.log('Guardando configuración:', notificationSettings);
+      alert('Configuración de notificaciones guardada correctamente');
+    } catch (error) {
+      console.error('Error al guardar configuración:', error);
+      alert('Error al guardar la configuración');
+    }
+  };
+
+  // Funciones para seguridad
+  const handleSecurityChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setSecurityData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleSecuritySubmit = async (e) => {
+    e.preventDefault();
+    
+    if (securityData.newPassword !== securityData.confirmPassword) {
+      alert('Las contraseñas nuevas no coinciden');
+      return;
+    }
+
+    try {
+      // Simular llamada a API
+      console.log('Datos de seguridad:', securityData);
+      alert('Configuración de seguridad actualizada');
+      setSecurityData({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+        twoFactorAuth: securityData.twoFactorAuth
+      });
+    } catch (error) {
+      console.error('Error al actualizar seguridad:', error);
+      alert('Error al actualizar la configuración de seguridad');
+    }
+  };
+
+  // Otras funciones
   const handleEditClick = () => setIsEditing(!isEditing);
   const handleSaveClick = () => setIsEditing(false);
   const handleCancelClick = () => setIsEditing(false);
   const handleTabChange = (tab) => setActiveTab(tab);
-  const handleNotificationChange = () => alert('Configuración de notificaciones cambiada');
-  const handleSecuritySubmit = (e) => {
-    e.preventDefault();
-    alert('Configuración de seguridad guardada - Se conectará al backend');
-  };
 
-  // Función para obtener el nombre del país
   const getCountryName = (code) => {
     const countries = {
       'AR': 'Argentina', 'BO': 'Bolivia', 'CL': 'Chile', 'CO': 'Colombia',
@@ -130,7 +186,6 @@ function Profile() {
     return countries[code] || code;
   };
 
-  // Función para formatear el número de tarjeta
   const formatCardNumber = (number) => {
     if (!number) return '**** **** **** ****';
     const lastFour = number.slice(-4);
@@ -186,6 +241,12 @@ function Profile() {
           onClick={() => handleTabChange('auctions')}
         >
           <i className="fas fa-gavel"></i> Subastas
+        </button>
+        <button 
+          className={`tab-btn ${activeTab === 'notifications' ? 'active' : ''}`}
+          onClick={() => handleTabChange('notifications')}
+        >
+          <i className="fas fa-bell"></i> Notificaciones
         </button>
         <button 
           className={`tab-btn ${activeTab === 'settings' ? 'active' : ''}`}
@@ -403,6 +464,12 @@ function Profile() {
           </div>
         )}
 
+        {activeTab === 'notifications' && (
+          <div className="notifications-content">
+            <Notificaciones notificationSettings={notificationSettings} />
+          </div>
+        )}
+
         {activeTab === 'settings' && (
           <div className="settings-content">
             <h2 className="section-title">
@@ -426,6 +493,9 @@ function Profile() {
                       id="currentPassword"
                       name="currentPassword"
                       placeholder="Ingresa tu contraseña actual"
+                      value={securityData.currentPassword}
+                      onChange={handleSecurityChange}
+                      required
                     />
                   </div>
                   
@@ -436,7 +506,12 @@ function Profile() {
                       id="newPassword"
                       name="newPassword"
                       placeholder="Ingresa tu nueva contraseña"
+                      value={securityData.newPassword}
+                      onChange={handleSecurityChange}
+                      required
+                      minLength="8"
                     />
+                    <small className="form-text">Mínimo 8 caracteres</small>
                   </div>
                   
                   <div className="form-group">
@@ -446,14 +521,19 @@ function Profile() {
                       id="confirmPassword"
                       name="confirmPassword"
                       placeholder="Confirma tu nueva contraseña"
+                      value={securityData.confirmPassword}
+                      onChange={handleSecurityChange}
+                      required
                     />
                   </div>
                   
-                  <div className="form-group checkbox-group">
+                  <div className="form-checkbox">
                     <input
                       type="checkbox"
                       id="twoFactorAuth"
                       name="twoFactorAuth"
+                      checked={securityData.twoFactorAuth}
+                      onChange={handleSecurityChange}
                     />
                     <label htmlFor="twoFactorAuth">Habilitar autenticación de dos factores</label>
                   </div>
@@ -511,9 +591,36 @@ function Profile() {
                       </label>
                       <span>Subastas por finalizar</span>
                     </div>
+                    <div className="notification-item">
+                      <label className="switch">
+                        <input 
+                          type="checkbox" 
+                          name="push" 
+                          checked={notificationSettings.push} 
+                          onChange={handleNotificationChange} 
+                        />
+                        <span className="slider round"></span>
+                      </label>
+                      <span>Notificaciones push</span>
+                    </div>
+                    <div className="notification-item">
+                      <label className="switch">
+                        <input 
+                          type="checkbox" 
+                          name="payment" 
+                          checked={notificationSettings.payment} 
+                          onChange={handleNotificationChange} 
+                        />
+                        <span className="slider round"></span>
+                      </label>
+                      <span>Notificaciones de pago</span>
+                    </div>
                   </div>
                   
-                  <button className="save-notifications-btn" onClick={handleNotificationChange}>
+                  <button 
+                    className="save-notifications-btn" 
+                    onClick={saveNotificationSettings}
+                  >
                     <i className="fas fa-save"></i> Guardar Configuración
                   </button>
                 </div>
@@ -541,6 +648,7 @@ function Profile() {
                           </div>
                           <div className="method-number">{formatCardNumber(method.cardNumber)}</div>
                           <div className="method-name">{method.cardName}</div>
+                          <div className="method-expiry">Expira: {method.expiryDate}</div>
                         </div>
                         <div className="method-actions">
                           {!method.isDefault && (
