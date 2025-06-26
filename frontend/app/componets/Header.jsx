@@ -2,19 +2,51 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-
+import '../styles/header.css';
+import { useEffect, useState } from 'react';
 
 export default function Header() {
+  const [scrolled, setScrolled] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('Todos');
+  const [searchFocused, setSearchFocused] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const filters = ['Todos', 'Electrónica', 'Arte', 'Coleccionables', 'Vehículos', 'Inmuebles', 'Moda'];
+
   return (
-    <header className="app-header">
+    <header className={`app-header ${scrolled ? 'scrolled' : ''}`}>
+      {/* Top Bar */}
       <div className="top-bar">
         <div className="top-bar-left">
           <button className="menu-toggle">
-            <i className="fas fa-bars"></i>
+            <Image 
+              src="/iconos/icobuscar.png" 
+              alt="Menú"
+              width={24}
+              height={24}
+            />
           </button>
-          <div className="search-box">
-            <i className="fas fa-search"></i>
-            <input type="text" placeholder="Buscar subastas..." />
+          <div className={`search-box ${searchFocused ? 'focused' : ''}`}>
+            <Image 
+              src="/iconos/icobuscar.png" 
+              alt="Buscar"
+              width={18}
+              height={18}
+              className="search-icon"
+            />
+            <input 
+              type="text" 
+              placeholder="Buscar subastas..." 
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setSearchFocused(false)}
+            />
           </div>
         </div>
         <div className="top-bar-right">
@@ -26,45 +58,97 @@ export default function Header() {
                 width={24} 
                 height={24}
               />
-              <span className="badge">5</span>
+              <span className="badge pulse">5</span>
             </button>
           </Link>
-          <button className="user-avatar">
-            <i className="fas fa-user-circle"></i>
-          </button>
+          <Link href="/login/profile">
+            <button className="user-avatar">
+              <Image 
+                src="/iconos/hombreperfil.png" 
+                alt="Perfil"
+                width={36}
+                height={36}
+                className="avatar-image"
+              />
+            </button>
+          </Link>
         </div>
       </div>
 
+      {/* Main Navigation */}
       <nav className="main-nav">
         <div className="nav-brand">
           <Link href="/" className="logo-link">
             <Image 
               src="/iconos/logo-SUBASTA.png" 
               alt="SubastaYa"
-              width={150}
-              height={40}
+              width={180}
+              height={50}
               className="logo-image"
             />
           </Link>
         </div>
         <div className="nav-tabs">
           <Link href="/" className="nav-item active">
-            <i className="fas fa-home"></i> Inicio
+            <Image 
+              src="/iconos/icoinicio.png" 
+              alt="Inicio"
+              width={20}
+              height={20}
+            />
+            <span>Inicio</span>
           </Link>
           <button className="nav-item">
-            <i className="fas fa-search"></i> Buscar
+            <Image 
+              src="/iconos/icobuscar.png" 
+              alt="Buscar"
+              width={20}
+              height={20}
+            />
+            <span>Buscar</span>
           </button>
           <Link href="/create-auction" className="create-auction-btn">
-            <i className="fas fa-plus-circle"></i> Crear Subasta
+            <Image 
+              src="/iconos/icocrearsubasta.png" 
+              alt="Crear subasta"
+              width={20}
+              height={20}
+            />
+            <span>Crear Subasta</span>
           </Link>
           <button className="nav-item">
-            <i className="fas fa-heart"></i> Favoritos
+            <Image 
+              src="/iconos/icofavorito.png" 
+              alt="Favoritos"
+              width={20}
+              height={20}
+            />
+            <span>Favoritos</span>
           </button>
-          <Link href="/login/profile" className="profile-btn">
-            <i className="fas fa-user"></i> Perfil
+          <Link href="/login/profile" className="nav-item">
+            <Image 
+              src="/iconos/hombreperfil.png" 
+              alt="Perfil"
+              width={20}
+              height={20}
+            />
+            <span>Perfil</span>
           </Link>
         </div>
       </nav>
+
+      {/* Quick Filters */}
+      <div className="quick-filters">
+        {filters.map(filter => (
+          <button 
+            key={filter}
+            className={`filter-btn ${activeFilter === filter ? 'active' : ''}`}
+            onClick={() => setActiveFilter(filter)}
+          >
+            {filter}
+          </button>
+        ))}
+      </div>
     </header>
   );
 }
