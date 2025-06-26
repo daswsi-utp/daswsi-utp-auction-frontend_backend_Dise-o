@@ -194,6 +194,11 @@ function Profile() {
 
   return (
     <div className="profile-container">
+      {/* Botón de volver añadido aquí */}
+      <Link href="/" className="back-button">
+        <i className="fas fa-arrow-left"></i> Volver al Inicio
+      </Link>
+      
       {/* Encabezado del perfil */}
       <div className="profile-header">
         <div className="profile-avatar-container">
