@@ -1,4 +1,5 @@
-'use client'; // Indica que este componente debe ejecutarse solo en el cliente
+//app\login\page.jsx
+'use client'; 
 
 import React, { useState } from 'react';
 import Link from 'next/link';
