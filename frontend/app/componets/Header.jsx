@@ -25,14 +25,7 @@ export default function Header() {
       {/* Top Bar */}
       <div className="top-bar">
         <div className="top-bar-left">
-          <button className="menu-toggle">
-            <Image 
-              src="/iconos/icobuscar.png" 
-              alt="Menú"
-              width={24}
-              height={24}
-            />
-          </button>
+          
           <div className={`search-box ${searchFocused ? 'focused' : ''}`}>
             <Image 
               src="/iconos/icobuscar.png" 
@@ -47,6 +40,9 @@ export default function Header() {
               onFocus={() => setSearchFocused(true)}
               onBlur={() => setSearchFocused(false)}
             />
+            <button className="search-button">
+              Buscar
+            </button>
           </div>
         </div>
         <div className="top-bar-right">
@@ -98,15 +94,8 @@ export default function Header() {
             />
             <span>Inicio</span>
           </Link>
-          <button className="nav-item">
-            <Image 
-              src="/iconos/icobuscar.png" 
-              alt="Buscar"
-              width={20}
-              height={20}
-            />
-            <span>Buscar</span>
-          </button>
+          
+          
           <Link href="/create-auction" className="create-auction-btn">
             <Image 
               src="/iconos/icocrearsubasta.png" 
@@ -116,7 +105,7 @@ export default function Header() {
             />
             <span>Crear Subasta</span>
           </Link>
-          <button className="nav-item">
+          <Link href="/favorites" className="nav-item">
             <Image 
               src="/iconos/icofavorito.png" 
               alt="Favoritos"
@@ -124,15 +113,6 @@ export default function Header() {
               height={20}
             />
             <span>Favoritos</span>
-          </button>
-          <Link href="/login/profile" className="nav-item">
-            <Image 
-              src="/iconos/hombreperfil.png" 
-              alt="Perfil"
-              width={20}
-              height={20}
-            />
-            <span>Perfil</span>
           </Link>
         </div>
       </nav>
