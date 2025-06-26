@@ -70,9 +70,10 @@
   align-items: center;
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 30px;
-  padding: 8px 15px;
+  padding: 0;
   transition: all 0.3s ease;
   border: 1px solid transparent;
+  overflow: hidden;
 }
 
 .search-box.focused {
@@ -82,7 +83,7 @@
 }
 
 .search-icon {
-  margin-right: 10px;
+  margin: 0 10px;
   opacity: 0.8;
   transition: opacity 0.3s;
 }
@@ -99,6 +100,7 @@
   font-size: 0.95rem;
   color: white;
   transition: all 0.3s;
+  padding: 10px 0;
 }
 
 .search-box.focused input {
@@ -111,6 +113,20 @@
 
 .search-box.focused input::placeholder {
   color: #A0AEC0;
+}
+
+.search-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.search-button:hover {
+  background-color: #5a52e0;
 }
 
 .top-bar-right {
@@ -357,6 +373,10 @@
   
   .quick-filters {
     padding: 10px 15px;
+  }
+
+  .search-button {
+    display: none;
   }
 }
 
