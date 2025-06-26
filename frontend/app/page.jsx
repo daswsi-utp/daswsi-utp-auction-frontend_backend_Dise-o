@@ -1,4 +1,3 @@
-//app\page.jsx
 'use client';
 
 import { useState } from 'react';
@@ -32,16 +31,6 @@ export default function Homepage() {
   return (
     <div className="dashboard">
       <Header />
-
-      <div className="quick-filters">
-        <button className="filter-btn active">Todos</button>
-        <button className="filter-btn">Electrónica</button>
-        <button className="filter-btn">Arte</button>
-        <button className="filter-btn">Coleccionables</button>
-        <button className="filter-btn">Vehículos</button>
-        <button className="filter-btn">Inmuebles</button>
-        <button className="filter-btn">Moda</button>
-      </div>
 
       <main className="main-content">
         <section className="auction-section">
