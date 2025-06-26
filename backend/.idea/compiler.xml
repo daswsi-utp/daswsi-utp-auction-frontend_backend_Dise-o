@@ -10,6 +10,7 @@
         <module name="microservice-payment" />
         <module name="microservice-simulator" />
         <module name="microservice-config" />
+        <module name="microservice-product" />
         <module name="microservice-bid" />
         <module name="microservice-user" />
         <module name="microservice-eureka" />
@@ -31,6 +32,7 @@
       <module name="microservice-eureka" options="-parameters" />
       <module name="microservice-gateway" options="-parameters" />
       <module name="microservice-payment" options="-parameters" />
+      <module name="microservice-product" options="-parameters" />
       <module name="microservice-simulator" options="-parameters" />
       <module name="microservice-user" options="-parameters" />
     </option>
