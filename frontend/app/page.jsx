@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Header from '../app/componets/Header';
 import '../app/styles/global.css';
 import DetalleArticle from './detail-article/page';
+import ChatbotBox from '../app/componets/ChatbotBox';
 
 export default function Homepage() {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -148,6 +149,7 @@ export default function Homepage() {
           toggleDetails={() => setSelectedItem(null)} 
         />
       )}
+      <ChatbotBox />
     </div>
   );
 }
