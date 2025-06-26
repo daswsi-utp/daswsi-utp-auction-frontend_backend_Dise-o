@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
+
 export default function Header() {
   return (
     <header className="app-header">
@@ -17,15 +18,17 @@ export default function Header() {
           </div>
         </div>
         <div className="top-bar-right">
-          <button className="notifications">
-            <Image 
-              src="/iconos/iconotifiacaiones.png" 
-              alt="Notificaciones"
-              width={24} 
-              height={24}
-            />
-            <span className="badge">5</span>
-          </button>
+          <Link href="/notifications">
+            <button className="notifications">
+              <Image 
+                src="/iconos/iconotifiacaiones.png" 
+                alt="Notificaciones"
+                width={24} 
+                height={24}
+              />
+              <span className="badge">5</span>
+            </button>
+          </Link>
           <button className="user-avatar">
             <i className="fas fa-user-circle"></i>
           </button>
