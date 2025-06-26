@@ -26,6 +26,7 @@
     <module>microservice-payment</module>
     <module>microservice-simulator</module>
     <module>microservice-user</module>
+    <module>microservice-product</module>
   </modules>
 
   <properties>
