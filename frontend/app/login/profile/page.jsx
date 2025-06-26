@@ -14,7 +14,7 @@ function Profile() {
     address: 'Calle Falsa 123',
     country: 'AR',
     zipcode: 'C1425',
-    profileImage: '/default-profile.jpg'
+    profileImage: '/iconos/perfilusuarios.png'
   });
 
   // Estados para el historial de subastas
