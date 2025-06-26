@@ -1,3 +1,4 @@
+//app\detail-article\page.jsx
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
