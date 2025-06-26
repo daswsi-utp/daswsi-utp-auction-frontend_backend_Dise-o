@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MicroserviceChatbotApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MicroserviceChatbotApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(MicroserviceChatbotApplication.class, args);
+    }
 }
