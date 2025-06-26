@@ -1,4 +1,4 @@
-// app/login/register/page.jsx
+//app\login\register\page.jsx
 'use client';
 
 import React from 'react';
