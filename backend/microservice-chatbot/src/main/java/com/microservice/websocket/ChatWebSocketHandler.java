@@ -19,9 +19,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         ChatMessage incoming = objectMapper.readValue(message.getPayload(), ChatMessage.class);
 
-        String responseText = chatService.getResponse(incoming.getContent());
+        ChatMessage response = chatService.getResponse(incoming.getContent());
 
-        ChatMessage response = new ChatMessage("Chatbot", responseText);
         session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response)));
     }
 }
