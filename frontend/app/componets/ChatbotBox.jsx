@@ -2,18 +2,27 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { FaGavel, FaRegCommentDots } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
 
 export default function ChatbotBox() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([{ sender: 'Chatbot', content: '¡Hola! ¿En qué puedo ayudarte hoy?' }]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [hasNewReply, setHasNewReply] = useState(false);
   const chatRef = useRef(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('chatMessages');
-      if (stored) setMessages(JSON.parse(stored));
+      if (stored && JSON.parse(stored).length > 0) {
+        setMessages(JSON.parse(stored));
+      } else {
+        
+        const bienvenida = { sender: 'Chatbot', content: 'Hola 😊 ¿En qué puedo ayudarte hoy?' };
+        setMessages([bienvenida]);
+        localStorage.setItem('chatMessages', JSON.stringify([bienvenida]));
+      }
     }
   }, []);
 
@@ -31,7 +40,12 @@ export default function ChatbotBox() {
       });
 
       const data = await res.json();
-      const botMsg = { sender: data.sender, content: data.content };
+      const botMsg = {
+        sender: data.sender,
+        content: data.content,
+        actionText: data.actionText,
+        actionUrl: data.actionUrl,
+      };
       setMessages((prev) => [...prev, botMsg]);
       if (!isOpen) setHasNewReply(true);
     } catch {
@@ -89,15 +103,43 @@ export default function ChatbotBox() {
                   : 'linear-gradient(to right, #c7d2fe, #a5b4fc)',
                 color: '#111827',
                 display: 'flex',
-                alignItems: 'flex-start',
-                gap: msg.sender === 'Tú' ? 0 : 8,
+                flexDirection: 'column',
                 animation: 'fadeIn 0.4s ease-in-out',
               }}
             >
               {msg.sender !== 'Tú' && (
-                <FaRegCommentDots style={{ marginTop: 4, color: '#3b82f6' }} />
+                <>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <FaRegCommentDots style={{ marginTop: 4, color: '#3b82f6' }} />
+                    <div>{msg.content}</div>
+                  </div>
+
+                  {msg.actionText && msg.actionUrl && (
+                    <button
+                      onClick={() => router.push(msg.actionUrl)}
+                      style={{
+                        marginTop: 10,
+                        backgroundColor: '#2563eb',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '9999px',
+                        padding: '8px 16px',
+                        fontSize: '0.9rem',
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                        transition: 'all 0.2s ease-in-out',
+                        alignSelf: 'flex-start',
+                      }}
+                      onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#1d4ed8'}
+                      onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#2563eb'}
+                    >
+                      👉 {msg.actionText}
+                    </button>
+                  )}
+                </>
               )}
-              <div>{msg.content}</div>
+
+              {msg.sender === 'Tú' && <div>{msg.content}</div>}
             </div>
           ))}
         </div>
@@ -114,6 +156,7 @@ export default function ChatbotBox() {
           <button onClick={sendMessage} style={styles.sendButton}>📤</button>
         </div>
       </div>
+
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }
