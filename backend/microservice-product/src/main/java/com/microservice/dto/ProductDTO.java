@@ -1,5 +1,7 @@
 package com.microservice.dto;
 
+import com.microservice.model.Status;
+
 import lombok.*;
 
 @Data
@@ -14,6 +16,6 @@ public class ProductDTO {
     private String category;
     private Double basePrice;
     private Long userId;
-    private String status;
+    private Status status;
     private Boolean visible;
 }
