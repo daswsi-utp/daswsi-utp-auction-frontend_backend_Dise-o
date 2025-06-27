@@ -4,11 +4,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import '../styles/header.css';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [activeFilter, setActiveFilter] = useState('Todos');
   const [searchFocused, setSearchFocused] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,12 +23,23 @@ export default function Header() {
 
   const filters = ['Todos', 'Electrónica', 'Arte', 'Coleccionables', 'Vehículos', 'Inmuebles', 'Moda'];
 
+  const handleSearch = () => {
+    if (searchTerm.trim()) {
+      router.push(`/search?query=${encodeURIComponent(searchTerm.trim())}`);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <header className={`app-header ${scrolled ? 'scrolled' : ''}`}>
       {/* Top Bar */}
       <div className="top-bar">
         <div className="top-bar-left">
-          
           <div className={`search-box ${searchFocused ? 'focused' : ''}`}>
             <Image 
               src="/iconos/icobuscar.png" 
@@ -35,12 +49,15 @@ export default function Header() {
               className="search-icon"
             />
             <input 
-              type="text" 
+              type="text"
               placeholder="Buscar subastas..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               onFocus={() => setSearchFocused(true)}
               onBlur={() => setSearchFocused(false)}
+              onKeyDown={handleKeyDown}
             />
-            <button className="search-button">
+            <button className="search-button" onClick={handleSearch}>
               Buscar
             </button>
           </div>
@@ -94,8 +111,6 @@ export default function Header() {
             />
             <span>Inicio</span>
           </Link>
-          
-          
           <Link href="/create-auction" className="create-auction-btn">
             <Image 
               src="/iconos/icocrearsubasta.png" 
