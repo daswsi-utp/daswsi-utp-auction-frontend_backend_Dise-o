@@ -1,6 +1,7 @@
 package com.microservice.service;
 
 import com.microservice.entity.ChatResponse;
+import com.microservice.model.ChatMessage;
 import com.microservice.repository.ChatResponseRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +14,9 @@ public class ChatService {
         this.repository = repository;
     }
 
-    public String getResponse(String keyword) {
+    public ChatMessage getResponse(String keyword) {
         return repository.findByKeywordIgnoreCase(keyword)
-                .map(ChatResponse::getResponse)
-                .orElse("No entendí tu pregunta :( . ¿Puedes reformularla?");
+                .map(r -> new ChatMessage("Chatbot", r.getResponse(), r.getActionText(), r.getActionUrl()))
+                .orElse(new ChatMessage("Chatbot", "No entendí tu pregunta :( . ¿Puedes reformularla?", null, null));
     }
 }

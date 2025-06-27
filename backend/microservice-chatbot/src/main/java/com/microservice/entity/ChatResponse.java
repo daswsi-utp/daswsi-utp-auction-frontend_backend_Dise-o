@@ -17,4 +17,8 @@ public class ChatResponse {
     private String keyword;
 
     private String response;
+
+    private String actionText;
+
+    private String actionUrl;
 }
