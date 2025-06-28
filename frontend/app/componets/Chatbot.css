@@ -56,3 +56,25 @@
   scrollbar-color: #cbd5e1 transparent;
   overflow-x: hidden;
 }
+
+.chatbot-inputSection {
+  display: flex;
+  border-top: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+.chatbot-input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  outline: none;
+  background-color: transparent;
+}
+
+.chatbot-sendButton {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  cursor: pointer;
+}

@@ -125,7 +125,19 @@ export default function ChatbotBox() {
         </div>
 
         <div className="chatbox" ref={chatRef}>
-        
+         
+        </div>
+
+        <div className="chatbot-inputSection">
+          <input
+            type="text"
+            value={input}
+            placeholder="Escribe tu mensaje..."
+            onChange={(e) => setInput(e.target.value)}
+            className="chatbot-input"
+            onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+          />
+          <button onClick={sendMessage} className="chatbot-sendButton">📤</button>
         </div>
       </div>
     </>
