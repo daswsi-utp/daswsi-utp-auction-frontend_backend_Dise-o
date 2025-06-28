@@ -21,6 +21,11 @@ export default function ChatbotBox() {
         const bienvenida = {
           sender: 'Chatbot',
           content: 'Hola 😊 ¿En qué puedo ayudarte hoy?',
+          quickReplies: [
+            { text: '📝 Crear subasta', value: 'crear subasta' },
+            { text: '📜 Ver historial', value: 'ver historial' },
+            { text: '💬 Otra pregunta', value: 'otra pregunta' },
+          ]
         };
         setMessages([bienvenida]);
         localStorage.setItem('chatMessages', JSON.stringify([bienvenida]));
@@ -30,15 +35,19 @@ export default function ChatbotBox() {
 
   const sendMessage = async () => {
     if (!input.trim()) return;
+    await sendQuickMessage(input);
+    setInput('');
+  };
 
-    const userMsg = { sender: 'Tú', content: input };
+  const sendQuickMessage = async (text) => {
+    const userMsg = { sender: 'Tú', content: text };
     setMessages((prev) => [...prev, userMsg]);
 
     try {
       const res = await fetch('http://localhost:8083/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sender: 'Usuario', content: input }),
+        body: JSON.stringify({ sender: 'Usuario', content: text }),
       });
 
       const data = await res.json();
@@ -56,8 +65,6 @@ export default function ChatbotBox() {
         { sender: 'Chatbot', content: 'Ocurrió un error al conectarme 🛠️' },
       ]);
     }
-
-    setInput('');
   };
 
   useEffect(() => {
@@ -119,24 +126,26 @@ export default function ChatbotBox() {
                   {msg.actionText && msg.actionUrl && (
                     <button
                       onClick={() => router.push(msg.actionUrl)}
-                      style={{
-                        marginTop: 10,
-                        backgroundColor: '#2563eb',
-                        color: '#fff',
-                        border: 'none',
-                        borderRadius: '9999px',
-                        padding: '8px 16px',
-                        fontSize: '0.9rem',
-                        cursor: 'pointer',
-                        boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
-                        transition: 'all 0.2s ease-in-out',
-                        alignSelf: 'flex-start',
-                      }}
+                      style={styles.actionButton}
                       onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#1d4ed8'}
                       onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#2563eb'}
                     >
                       👉 {msg.actionText}
                     </button>
+                  )}
+
+                  {msg.quickReplies && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 10 }}>
+                      {msg.quickReplies.map((btn, i) => (
+                        <button
+                          key={i}
+                          onClick={() => sendQuickMessage(btn.value)}
+                          style={styles.quickReplyButton}
+                        >
+                          {btn.text}
+                        </button>
+                      ))}
+                    </div>
                   )}
                 </>
               )}
@@ -272,5 +281,26 @@ const styles = {
     border: 'none',
     padding: '10px 16px',
     cursor: 'pointer',
+  },
+  actionButton: {
+    marginTop: 10,
+    backgroundColor: '#2563eb',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '9999px',
+    padding: '8px 16px',
+    fontSize: '0.9rem',
+    cursor: 'pointer',
+    boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+    alignSelf: 'flex-start',
+  },
+  quickReplyButton: {
+    backgroundColor: '#e0e7ff',
+    border: '1px solid #a5b4fc',
+    borderRadius: 999,
+    padding: '6px 12px',
+    fontSize: '0.85rem',
+    cursor: 'pointer',
+    color: '#1e3a8a',
   },
 };
