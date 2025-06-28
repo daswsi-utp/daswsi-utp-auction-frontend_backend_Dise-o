@@ -54,9 +54,8 @@ export default function ChatbotBox() {
       const botMsg = {
         sender: data.sender,
         content: data.content,
-        actionText: data.actionText,
-        actionUrl: data.actionUrl,
-        quickReplies: data.quickReplies, // opcional si backend lo envía
+        quickReplies: data.quickReplies,
+        actions: data.actions, // 👈 Ahora aceptamos múltiples botones
       };
       setMessages((prev) => [...prev, botMsg]);
       if (!isOpen) setHasNewReply(true);
@@ -124,15 +123,20 @@ export default function ChatbotBox() {
                     <div>{msg.content}</div>
                   </div>
 
-                  {msg.actionText && msg.actionUrl && (
-                    <button
-                      onClick={() => router.push(msg.actionUrl)}
-                      style={styles.actionButton}
-                      onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#1d4ed8'}
-                      onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#2563eb'}
-                    >
-                      👉 {msg.actionText}
-                    </button>
+                  {msg.actions && msg.actions.length > 0 && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 10 }}>
+                      {msg.actions.map((action, i) => (
+                        <button
+                          key={i}
+                          onClick={() => router.push(action.url)}
+                          style={styles.actionButton}
+                          onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#1d4ed8'}
+                          onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#2563eb'}
+                        >
+                          👉 {action.text}
+                        </button>
+                      ))}
+                    </div>
                   )}
 
                   {msg.quickReplies && (
@@ -284,7 +288,6 @@ const styles = {
     cursor: 'pointer',
   },
   actionButton: {
-    marginTop: 10,
     backgroundColor: '#2563eb',
     color: '#fff',
     border: 'none',
