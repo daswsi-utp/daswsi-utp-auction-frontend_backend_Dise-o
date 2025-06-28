@@ -84,32 +84,9 @@ export default function ChatbotBox() {
 
   return (
     <>
-      <button onClick={toggleChat} style={{
-        position: 'fixed',
-        bottom: 20,
-        right: 20,
-        zIndex: 1001,
-        backgroundColor: '#3b82f6',
-        color: 'white',
-        border: 'none',
-        borderRadius: '50%',
-        width: 60,
-        height: 60,
-        fontSize: 28,
-        boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-        cursor: 'pointer',
-      }}>
+      <button onClick={toggleChat} className="chatbot-floatingButton">
         💬
-        {hasNewReply && <span style={{
-          position: 'absolute',
-          top: 6,
-          right: 6,
-          width: 12,
-          height: 12,
-          backgroundColor: '#ef4444',
-          borderRadius: '50%',
-          border: '2px solid white',
-        }}></span>}
+        {hasNewReply && <span className="chatbot-notificationDot"></span>}
       </button>
 
       <div
