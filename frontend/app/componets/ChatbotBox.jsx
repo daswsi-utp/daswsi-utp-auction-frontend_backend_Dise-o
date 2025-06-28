@@ -84,12 +84,62 @@ export default function ChatbotBox() {
 
   return (
     <>
-      <button onClick={toggleChat} className="chatbot-floatingButton">
+      <button onClick={toggleChat} style={{
+        position: 'fixed',
+        bottom: 20,
+        right: 20,
+        zIndex: 1001,
+        backgroundColor: '#3b82f6',
+        color: 'white',
+        border: 'none',
+        borderRadius: '50%',
+        width: 60,
+        height: 60,
+        fontSize: 28,
+        boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+        cursor: 'pointer',
+      }}>
         💬
-        {hasNewReply && <span className="chatbot-notificationDot"></span>}
+        {hasNewReply && <span style={{
+          position: 'absolute',
+          top: 6,
+          right: 6,
+          width: 12,
+          height: 12,
+          backgroundColor: '#ef4444',
+          borderRadius: '50%',
+          border: '2px solid white',
+        }}></span>}
       </button>
 
-      
+      <div
+        className="chatbot-container"
+        style={{
+          transform: isOpen ? 'scale(1)' : 'scale(0)',
+          opacity: isOpen ? 1 : 0,
+        }}
+      >
+        <div style={{
+          backgroundColor: '#1e40af',
+          color: 'white',
+          padding: '12px 16px',
+          fontWeight: 'bold',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+          <span><FaGavel style={{ marginRight: 8 }} />Asistente Virtual</span>
+          <button onClick={toggleChat} style={{
+            background: 'transparent',
+            border: 'none',
+            color: 'white',
+            fontSize: 16,
+            cursor: 'pointer',
+          }}>✖</button>
+        </div>
+
+       
+      </div>
     </>
   );
 }
