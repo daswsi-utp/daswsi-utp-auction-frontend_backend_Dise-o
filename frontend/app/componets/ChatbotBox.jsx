@@ -18,8 +18,10 @@ export default function ChatbotBox() {
       if (stored && JSON.parse(stored).length > 0) {
         setMessages(JSON.parse(stored));
       } else {
-        
-        const bienvenida = { sender: 'Chatbot', content: 'Hola 😊 ¿En qué puedo ayudarte hoy?' };
+        const bienvenida = {
+          sender: 'Chatbot',
+          content: 'Hola 😊 ¿En qué puedo ayudarte hoy?',
+        };
         setMessages([bienvenida]);
         localStorage.setItem('chatMessages', JSON.stringify([bienvenida]));
       }
