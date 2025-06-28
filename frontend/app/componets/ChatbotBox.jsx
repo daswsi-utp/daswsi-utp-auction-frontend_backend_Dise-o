@@ -136,9 +136,31 @@ export default function ChatbotBox() {
                     <FaRegCommentDots style={{ marginTop: 4, color: '#3b82f6' }} />
                     <div>{msg.content}</div>
                   </div>
+
+                  {msg.actionText && msg.actionUrl && (
+                    <button
+                      onClick={() => router.push(msg.actionUrl)}
+                      className="chatbot-actionButton"
+                    >
+                      👉 {msg.actionText}
+                    </button>
+                  )}
+
+                  {msg.quickReplies && (
+                    <div className="chatbot-quickReplies">
+                      {msg.quickReplies.map((btn, i) => (
+                        <button
+                          key={i}
+                          onClick={() => sendQuickMessage(btn.value)}
+                          className="chatbot-quickReplyButton"
+                        >
+                          {btn.text}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </>
               )}
-
               {msg.sender === 'Tú' && <div>{msg.content}</div>}
             </div>
           ))}

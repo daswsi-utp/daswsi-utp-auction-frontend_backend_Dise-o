@@ -97,3 +97,37 @@
   align-self: flex-start;
   background: linear-gradient(to right, #c7d2fe, #a5b4fc);
 }
+
+.chatbot-actionButton {
+  margin-top: 10px;
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 9999px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  align-self: flex-start;
+}
+
+.chatbot-actionButton:hover {
+  background-color: #1d4ed8;
+}
+
+.chatbot-quickReplies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.chatbot-quickReplyButton {
+  background-color: #e0e7ff;
+  border: 1px solid #a5b4fc;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: #1e3a8a;
+}
