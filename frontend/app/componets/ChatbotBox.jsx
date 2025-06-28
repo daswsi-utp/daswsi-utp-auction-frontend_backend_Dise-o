@@ -119,26 +119,12 @@ export default function ChatbotBox() {
           opacity: isOpen ? 1 : 0,
         }}
       >
-        <div style={{
-          backgroundColor: '#1e40af',
-          color: 'white',
-          padding: '12px 16px',
-          fontWeight: 'bold',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
+        <div className="chatbot-header">
           <span><FaGavel style={{ marginRight: 8 }} />Asistente Virtual</span>
-          <button onClick={toggleChat} style={{
-            background: 'transparent',
-            border: 'none',
-            color: 'white',
-            fontSize: 16,
-            cursor: 'pointer',
-          }}>✖</button>
+          <button onClick={toggleChat} className="chatbot-closeBtn">✖</button>
         </div>
 
-       
+     
       </div>
     </>
   );

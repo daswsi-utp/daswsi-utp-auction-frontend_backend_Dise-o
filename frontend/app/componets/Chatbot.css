@@ -13,3 +13,21 @@
   transition: transform 0.3s ease, opacity 0.3s ease;
   transform-origin: bottom right;
 }
+
+.chatbot-header {
+  background-color: #1e40af;
+  color: white;
+  padding: 12px 16px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatbot-closeBtn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
