@@ -124,7 +124,9 @@ export default function ChatbotBox() {
           <button onClick={toggleChat} className="chatbot-closeBtn">✖</button>
         </div>
 
-     
+        <div className="chatbox" ref={chatRef}>
+        
+        </div>
       </div>
     </>
   );
