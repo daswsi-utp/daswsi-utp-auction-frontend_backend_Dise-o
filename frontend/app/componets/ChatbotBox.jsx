@@ -56,6 +56,7 @@ export default function ChatbotBox() {
         content: data.content,
         actionText: data.actionText,
         actionUrl: data.actionUrl,
+        quickReplies: data.quickReplies, // opcional si backend lo envía
       };
       setMessages((prev) => [...prev, botMsg]);
       if (!isOpen) setHasNewReply(true);
