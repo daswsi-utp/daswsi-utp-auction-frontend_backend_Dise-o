@@ -40,6 +40,9 @@
   flex-direction: column;
   gap: 8px;
   background-color: #f3f4f6;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+  overflow-x: hidden;
 }
 
 .chatbox::-webkit-scrollbar {
@@ -49,12 +52,6 @@
 .chatbox::-webkit-scrollbar-thumb {
   background-color: #cbd5e1;
   border-radius: 8px;
-}
-
-.chatbox {
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
-  overflow-x: hidden;
 }
 
 .chatbot-inputSection {
@@ -77,4 +74,26 @@
   border: none;
   padding: 10px 16px;
   cursor: pointer;
+}
+
+.chatbot-message {
+  max-width: 85%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.4s ease-in-out;
+  color: #111827;
+}
+
+.chatbot-user {
+  align-self: flex-end;
+  background: linear-gradient(to right, #93c5fd, #60a5fa);
+}
+
+.chatbot-bot {
+  align-self: flex-start;
+  background: linear-gradient(to right, #c7d2fe, #a5b4fc);
 }

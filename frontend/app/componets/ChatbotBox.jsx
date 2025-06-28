@@ -125,7 +125,23 @@ export default function ChatbotBox() {
         </div>
 
         <div className="chatbox" ref={chatRef}>
-         
+          {messages.map((msg, idx) => (
+            <div
+              key={idx}
+              className={`chatbot-message ${msg.sender === 'Tú' ? 'chatbot-user' : 'chatbot-bot'}`}
+            >
+              {msg.sender !== 'Tú' && (
+                <>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <FaRegCommentDots style={{ marginTop: 4, color: '#3b82f6' }} />
+                    <div>{msg.content}</div>
+                  </div>
+                </>
+              )}
+
+              {msg.sender === 'Tú' && <div>{msg.content}</div>}
+            </div>
+          ))}
         </div>
 
         <div className="chatbot-inputSection">
