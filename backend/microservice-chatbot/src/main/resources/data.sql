@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS chat_response (
 INSERT INTO chat_response (keywords, response, action_text, action_url) VALUES
 ('crear subasta, nueva subasta, publicar artículo, hacer subasta',
  'Haz clic en el botón para crear subasta',
- '👉 Crear subasta',
+ 'Crear subasta',
  '/create-auction'),
 
 ('ver productos, mostrar artículos, productos disponibles, ver catálogo',
@@ -34,6 +34,15 @@ INSERT INTO chat_response (keywords, response, action_text, action_url) VALUES
  'Claro, dime qué necesitas y trataré de ayudarte.',
  null,
  null);
+
+-- EL STOP
+CREATE TABLE stopword (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  word VARCHAR(50) NOT NULL UNIQUE
+);
+
+INSERT INTO stopword (word) VALUES 
+('plis'), ('porfa'), ('por favor'), ('quiero'), ('quisiera'), ('me'), ('gustaría'), ('necesito');
 
 -- Por si toca borrar por bug o algo
 DROP DATABASE IF EXISTS chatbot_db; 
