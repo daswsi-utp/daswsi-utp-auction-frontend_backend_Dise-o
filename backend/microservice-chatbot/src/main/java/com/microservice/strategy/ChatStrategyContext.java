@@ -14,7 +14,8 @@ public class ChatStrategyContext {
         this.strategy = strategy;
     }
 
-    public String executeStrategy(String message, List<ChatResponse> respuestas) {
-        return strategy.generateResponse(message, respuestas);
-    }
+    public ChatResponse executeStrategy(String message, List<ChatResponse> respuestas) {
+    return strategy.generateResponse(message, respuestas);
+}
+
 }
