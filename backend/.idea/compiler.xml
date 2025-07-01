@@ -14,8 +14,16 @@
         <module name="microservice-bid" />
         <module name="microservice-user" />
         <module name="microservice-eureka" />
-        <module name="microservice-auction" />
         <module name="microservice-chatbot" />
+      </profile>
+      <profile name="Annotation profile for backend" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.26/lombok-1.18.26.jar" />
+        </processorPath>
+        <module name="microservice-auction" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
