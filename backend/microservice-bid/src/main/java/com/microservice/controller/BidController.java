@@ -10,7 +10,7 @@ import com.microservice.service.BidService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/bids")
+@RequestMapping("/api/bids")
 public class BidController {
 
     @Autowired
