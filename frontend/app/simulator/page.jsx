@@ -6,6 +6,8 @@ export default function SimulatorPage() {
   const [strategy, setStrategy] = useState('AGGRESSIVE');
   const [auctionState, setAuctionState] = useState(null);
   const [isAuctionStarted, setIsAuctionStarted] = useState(false);
+  const [userBid, setUserBid] = useState('');
+  const [isSendingBid, setIsSendingBid] = useState(false);
   const intervalRef = useRef(null);
 
   const handleStartAuction = async () => {
@@ -20,7 +22,6 @@ export default function SimulatorPage() {
       setAuctionState(data);
       setIsAuctionStarted(true);
 
-   
       intervalRef.current = setInterval(fetchAuctionState, 1000);
     } catch (error) {
       console.error('Error al iniciar la subasta:', error);
@@ -39,6 +40,27 @@ export default function SimulatorPage() {
       }
     } catch (error) {
       console.error('Error al obtener estado de subasta:', error);
+    }
+  };
+
+  const handleSendBid = async () => {
+    if (!userBid || isNaN(userBid)) return;
+
+    setIsSendingBid(true);
+    try {
+      const res = await fetch('http://localhost:8085/pujar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: parseFloat(userBid) }),
+      });
+
+      const data = await res.json();
+      setAuctionState(data);
+      setUserBid('');
+    } catch (error) {
+      console.error('Error al enviar puja:', error);
+    } finally {
+      setIsSendingBid(false);
     }
   };
 
@@ -76,9 +98,27 @@ export default function SimulatorPage() {
 
       {auctionState && (
         <div className="mt-6">
-          <p className="text-lg">
+          <p className="text-lg mb-2">
             Tiempo restante: <span className="font-semibold">{auctionState.remainingTime}s</span>
           </p>
+
+          <div className="flex gap-2 mb-4">
+            <input
+              type="number"
+              placeholder="Ingresa tu puja"
+              value={userBid}
+              onChange={(e) => setUserBid(e.target.value)}
+              className="w-full border rounded px-3 py-2"
+              disabled={auctionState.remainingTime <= 0}
+            />
+            <button
+              onClick={handleSendBid}
+              className="bg-green-600 hover:bg-green-700 text-white font-bold px-4 rounded"
+              disabled={isSendingBid || auctionState.remainingTime <= 0}
+            >
+              Enviar
+            </button>
+          </div>
         </div>
       )}
     </div>
