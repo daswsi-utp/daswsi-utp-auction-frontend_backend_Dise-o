@@ -98,10 +98,11 @@ export default function SimulatorPage() {
 
       {auctionState && (
         <div className="mt-6">
-          <p className="text-lg mb-2">
+          <p className="text-lg mb-4">
             Tiempo restante: <span className="font-semibold">{auctionState.remainingTime}s</span>
           </p>
 
+          {/* Input para pujar */}
           <div className="flex gap-2 mb-4">
             <input
               type="number"
@@ -118,6 +119,28 @@ export default function SimulatorPage() {
             >
               Enviar
             </button>
+          </div>
+
+          {/* Historial de pujas */}
+          <div className="bg-white p-4 rounded shadow-md mb-4">
+            <h2 className="text-lg font-semibold mb-3">Historial de Pujas</h2>
+            <div className="space-y-2 max-h-64 overflow-y-auto">
+              {auctionState.bidHistory.map((bid, index) => (
+                <div
+                  key={index}
+                  className={`px-4 py-2 rounded-full text-sm max-w-xs ${
+                    bid.bidder === 'USER'
+                      ? 'bg-blue-100 self-end ml-auto text-right'
+                      : 'bg-gray-200 self-start mr-auto text-left'
+                  }`}
+                >
+                  <span className="block font-medium">
+                    {bid.bidder === 'USER' ? 'Tú' : 'Máquina'}
+                  </span>
+                  <span>S/. {bid.amount.toFixed(2)}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
