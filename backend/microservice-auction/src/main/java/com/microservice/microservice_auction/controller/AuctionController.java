@@ -14,7 +14,7 @@ import java.util.List;
   methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS }
 )
 @RestController
-@RequestMapping("/auctions")
+@RequestMapping("/api/auctions")
 public class AuctionController {
 
     @Autowired

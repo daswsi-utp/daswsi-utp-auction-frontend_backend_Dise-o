@@ -1,0 +1,45 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: msvc-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: auction
+          uri: 'http://localhost:8085'
+          predicates:
+            - Path=/api/auctions/**
+            - Path=/api/auction-history/**
+        - id: bid
+          uri: 'http://localhost:8090'
+          predicates:
+            - Path=/api/bids/**
+        - id: chatbot
+          uri: 'http://localhost:8095'
+          predicates:
+            - Path=/api/chat/**
+            - Path=/api/ping/**
+        - id: payment
+          uri: 'http://localhost:8100'
+          predicates:
+            - Path=/api/transactions/**
+        - id: product
+          uri: 'http://localhost:8105'
+          predicates:
+            - Path=/api/products/**
+        - id: simulator
+          uri: 'http://localhost:8110'
+          predicates:
+            - Path=/api/simulator/**
+        - id: user
+          uri: 'http://localhost:8115'
+          predicates:
+            - Path=/api/user/**
+eureka:
+  client:
+    register-with-eureka: false
