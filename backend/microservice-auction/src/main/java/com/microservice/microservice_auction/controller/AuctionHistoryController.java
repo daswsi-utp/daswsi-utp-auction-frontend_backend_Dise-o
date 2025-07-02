@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/auction-history")
+@RequestMapping("/api/auction-history")
 public class AuctionHistoryController {
 
     @Autowired

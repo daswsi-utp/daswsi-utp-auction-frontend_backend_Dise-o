@@ -5,7 +5,7 @@ import com.microservice.service.ChatService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/chat")
+@RequestMapping("/api/chat")
 public class ChatController {
 
     private final ChatService chatService;
