@@ -1,150 +1,243 @@
+
 .simulator-container {
-  padding: 2rem;
-  max-width: 700px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
+  padding: 30px 40px 60px;
+  background: linear-gradient(to bottom right, var(--light-color), var(--accent-color));
+  animation: fadeIn 0.6s ease-in-out;
+  flex-wrap: wrap;
+  min-height: calc(100vh - 70px);
+  overflow: hidden;
 }
 
-.simulator-title {
-  font-size: 1.75rem;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 1rem;
-}
 
-.strategy-select-box {
-  margin-bottom: 1rem;
-}
-
-.label {
-  display: block;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-}
-
-.select {
+.simulator-card {
+  background-color: white;
+  border-radius: 20px;
+  padding: 30px 25px;
   width: 100%;
-  padding: 0.5rem;
+  max-width: 600px;
+  box-shadow: var(--shadow-lg);
+  animation: scaleIn 0.5s ease-out;
+  flex: 1;
+}
+
+
+.history-card {
+  background-color: white;
+  border-radius: 20px;
+  padding: 25px 20px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  animation: fadeInRight 0.6s ease;
+  flex: 1;
+  min-height: 460px;
+}
+
+
+.simulator-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 5px;
+  animation: fadeInDown 0.5s ease;
+}
+
+.simulator-header p {
+  font-size: 1rem;
+  color: var(--dark-color);
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+
+.simulator-section {
+  margin-bottom: 20px;
+}
+
+
+.simulator-select,
+.simulator-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #CBD5E0;
   border-radius: 12px;
-  border: 1px solid #ccc;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.3s;
 }
 
-.start-button,
-.bid-button,
-.reset-button {
-  width: 100%;
-  padding: 0.75rem;
-  font-weight: bold;
+.simulator-select:focus,
+.simulator-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
+}
+
+
+.simulator-button {
+  display: inline-block;
+  background: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 12px;
-  transition: 0.2s ease;
-}
-
-.start-button {
-  background-color: #2563eb;
-}
-
-.start-button:hover {
-  background-color: #1e40af;
-}
-
-.bid-button {
-  background-color: #22c55e;
-}
-
-.bid-button:hover {
-  background-color: #16a34a;
-}
-
-.reset-button {
-  background-color: #ef4444;
-  margin-top: 1rem;
-}
-
-.reset-button:hover {
-  background-color: #b91c1c;
-}
-
-.bid-input-group {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.bid-input {
-  flex: 1;
-  padding: 0.5rem;
-  border-radius: 12px;
-  border: 1px solid #ccc;
-}
-
-.auction-box {
-  margin-top: 2rem;
-}
-
-.time-counter {
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
-}
-
-.history-box {
-  background-color: #fff;
-  padding: 1rem;
-  border-radius: 16px;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
-  margin-bottom: 1rem;
-}
-
-.history-title {
+  padding: 12px 22px;
+  border-radius: 10px;
   font-weight: bold;
-  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
 }
 
-.history-scroll {
-  max-height: 250px;
-  overflow-y: auto;
+.simulator-button:hover {
+  background: #574fd6;
+  transform: scale(1.03);
+}
+
+.start-btn {
+  background: var(--gradient-primary);
+}
+
+.bid-btn {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.reset-btn {
+  background-color: var(--danger-color);
+}
+
+
+.recommendation {
+  margin-top: 20px;
+  padding: 16px;
+  background-color: rgba(99, 102, 241, 0.08);
+  border-left: 5px solid var(--primary-color);
+  border-radius: 12px;
+  font-size: 1.1rem;
+  color: #1e293b;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+
+.bid-history {
+  margin-top: 10px;
+}
+
+.bid-bubble {
+  background-color: #f1f5f9;
+  padding: 12px 15px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: fadeInUp 0.4s ease;
+}
+
+.user-bid {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.machine-bid {
+  background-color: var(--warning-color);
+  color: white;
+}
+
+.timestamp {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+
+.auction-result-box {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #eef2ff;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  animation: fadeIn 0.5s ease;
+}
+
+.result-message {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.result-message.win {
+  color: var(--secondary-color);
+}
+
+.result-message.lose {
+  color: var(--danger-color);
+}
+
+.result-subtext {
+  margin-top: 8px;
+  font-size: 1rem;
+  color: var(--dark-color);
+}
+
+
+.status-box {
+  font-size: 1.1rem;
+  color: var(--dark-color);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
-.bubble {
-  padding: 0.6rem 1rem;
-  border-radius: 18px;
-  font-size: 0.9rem;
-  max-width: 70%;
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.bubble.user {
-  background-color: #dbeafe;
-  align-self: flex-end;
-  text-align: right;
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.bubble.machine {
-  background-color: #f3f4f6;
-  align-self: flex-start;
-  text-align: left;
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-15px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.bubble-author {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
-.result-box {
-  background-color: #fef3c7;
-  border-left: 4px solid #facc15;
-  padding: 1rem;
-  border-radius: 12px;
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-.result-title {
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
 
-.result-text {
-  color: #92400e;
+@media (max-width: 768px) {
+  .simulator-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 15px;
+  }
+
+  .simulator-card,
+  .history-card {
+    max-width: 100%;
+  }
+
+  .status-box {
+    font-size: 1rem;
+  }
+
+  .result-message {
+    font-size: 1.2rem;
+  }
+}
+body {
+  overflow-y: hidden;
 }
