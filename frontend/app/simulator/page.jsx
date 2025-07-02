@@ -1,17 +1,50 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function SimulatorPage() {
   const [strategy, setStrategy] = useState('AGGRESSIVE');
   const [auctionState, setAuctionState] = useState(null);
   const [isAuctionStarted, setIsAuctionStarted] = useState(false);
+  const intervalRef = useRef(null);
 
   const handleStartAuction = async () => {
-    
-    setIsAuctionStarted(true);
-    console.log('Subasta iniciada con estrategia:', strategy);
+    try {
+      const res = await fetch('http://localhost:8085/iniciar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ strategy }),
+      });
+
+      const data = await res.json();
+      setAuctionState(data);
+      setIsAuctionStarted(true);
+
+   
+      intervalRef.current = setInterval(fetchAuctionState, 1000);
+    } catch (error) {
+      console.error('Error al iniciar la subasta:', error);
+    }
   };
+
+  const fetchAuctionState = async () => {
+    try {
+      const res = await fetch('http://localhost:8085/estado');
+      const data = await res.json();
+
+      setAuctionState(data);
+
+      if (data.remainingTime <= 0) {
+        clearInterval(intervalRef.current);
+      }
+    } catch (error) {
+      console.error('Error al obtener estado de subasta:', error);
+    }
+  };
+
+  useEffect(() => {
+    return () => clearInterval(intervalRef.current);
+  }, []);
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
@@ -41,7 +74,13 @@ export default function SimulatorPage() {
         Iniciar Subasta
       </button>
 
-    
+      {auctionState && (
+        <div className="mt-6">
+          <p className="text-lg">
+            Tiempo restante: <span className="font-semibold">{auctionState.remainingTime}s</span>
+          </p>
+        </div>
+      )}
     </div>
   );
 }
