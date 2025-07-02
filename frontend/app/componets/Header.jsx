@@ -111,6 +111,16 @@ export default function Header() {
             />
             <span>Inicio</span>
           </Link>
+          {/*ESTOY AGREGANDO LA OPCIÓN DE SIMULADOR*/}
+          <Link href="/simulator" className="simulator-btn">
+            <Image 
+              src="/iconos/simulador.png" 
+              alt="Simulador"
+              width={20}
+              height={20}
+            />
+            <span className="simulator-label">Simulador de estrategias </span>
+          </Link>
           <Link href="/create-auction" className="create-auction-btn">
             <Image 
               src="/iconos/icocrearsubasta.png" 
