@@ -403,3 +403,14 @@
   box-shadow: var(--shadow-md);
   text-decoration: none;
 }
+
+.simulator-btn:active {
+  transform: translateY(0);
+}
+
+
+@media (max-width: 768px) {
+  .simulator-label {
+    display: none;
+  }
+}
