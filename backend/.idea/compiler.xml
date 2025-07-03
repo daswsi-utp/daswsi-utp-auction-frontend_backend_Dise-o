@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="microservice-gateway" />
         <module name="microservice-payment" />
+        <module name="microservice-count" />
         <module name="microservice-simulator" />
         <module name="microservice-config" />
         <module name="search-service" />
@@ -21,6 +22,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
         <module name="microservice-user" />
@@ -43,6 +45,7 @@
       <module name="microservice-bid" options="-parameters" />
       <module name="microservice-chatbot" options="-parameters" />
       <module name="microservice-config" options="-parameters" />
+      <module name="microservice-count" options="-parameters" />
       <module name="microservice-eureka" options="-parameters" />
       <module name="microservice-gateway" options="-parameters" />
       <module name="microservice-payment" options="-parameters" />

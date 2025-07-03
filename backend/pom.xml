@@ -28,6 +28,7 @@
     <module>microservice-user</module>
     <module>microservice-product</module>
     <module>search-service</module>
+    <module>microservice-count</module>
   </modules>
 
   <properties>
