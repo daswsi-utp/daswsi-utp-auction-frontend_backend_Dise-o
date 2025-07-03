@@ -1,10 +1,9 @@
 'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
-import '../styles/header.css';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import '../styles/header.css';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -102,7 +101,7 @@ export default function Header() {
           </Link>
         </div>
         <div className="nav-tabs">
-          <Link href="/" className="nav-item active">
+          <Link href="/" className="nav-item">
             <Image 
               src="/iconos/icoinicio.png" 
               alt="Inicio"
