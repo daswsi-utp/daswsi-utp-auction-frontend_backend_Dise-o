@@ -1,8 +1,18 @@
+logging:
+  level:
+    org.springframework.web.servlet.DispatcherServlet: TRACE
+    org.springframework.web: DEBUG
+
 server:
   port: 8085
+  tomcat:
+    accesslog:
+      enabled: true
+      pattern: "%h %l %u %t \"%r\" %s %b"
+
 spring:
   application:
-    name: microservice-auction
+    name: msvc-auction
 
   datasource:
     url: jdbc:mysql://localhost:3306/service_product
@@ -17,6 +27,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+
 eureka:
   instance:
     hostname: localhost
