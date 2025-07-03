@@ -1,29 +1,39 @@
+// app/login/forgot-password/page.jsx
 'use client';
 
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { initiatePasswordReset } from '../../Services/authService';
 import '../../styles/login1.css';
 
 function ForgotPassword() {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [emailSent, setEmailSent] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
+    setError('');
+    
+    try {
+      await initiatePasswordReset(email); // Esta función ya envía el email como query param
       setEmailSent(true);
-    }, 1500);
+    } catch (err) {
+      // El error ya viene formateado desde el interceptor de Axios
+      setError(err.message || 'Error desconocido al enviar el correo de recuperación.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleGoogleLogin = () => {
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
+    // Asegúrate de que NEXT_PUBLIC_API_BASE_URL apunte al Gateway (http://localhost:8080)
+    // y que el path sea /oauth2/authorize/google
+    window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/oauth2/authorize/google`;
   };
 
   return (
@@ -75,6 +85,8 @@ function ForgotPassword() {
                 : "Ingresa tu email para recibir instrucciones"}
             </p>
           </div>
+          
+          {error && <div className="auth-error">{error}</div>}
           
           {emailSent ? (
             <div className="text-center py-6">
