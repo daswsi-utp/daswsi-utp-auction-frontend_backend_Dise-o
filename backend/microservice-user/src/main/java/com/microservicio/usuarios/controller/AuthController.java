@@ -12,6 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(
+  origins = "*",
+  allowedHeaders = "*",
+  methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS }
+)
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
