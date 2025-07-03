@@ -1,7 +1,7 @@
-//app\create-auction\page.jsx
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Header from '../componets/Header';
 import '../create-auction/create-auction.css';
 
 export default function CreateAuctionPage() {
@@ -86,12 +86,10 @@ export default function CreateAuctionPage() {
     }
 
     try {
-      // Validar método de pago seleccionado
       if (!paymentMethod) {
         throw new Error('Debe seleccionar un método de pago');
       }
 
-      // Preparar datos de pago
       let paymentData = { method: paymentMethod };
       if (paymentMethod === 'transferencia') {
         if (!bankDetails.bankName || !bankDetails.accountNumber || !bankDetails.cci) {
@@ -149,52 +147,8 @@ export default function CreateAuctionPage() {
 
   return (
     <div className="dashboard">
-      <header className="app-header">
-        <div className="top-bar">
-          <div className="top-bar-left">
-            <button className="menu-toggle">
-              <i className="fas fa-bars"></i>
-            </button>
-            <div className="search-box">
-              <i className="fas fa-search"></i>
-              <input type="text" placeholder="Buscar subastas..." />
-            </div>
-          </div>
-          <div className="top-bar-right">
-            <button className="notifications">
-              <i className="fas fa-bell"></i>
-              <span className="badge">5</span>
-            </button>
-            <button className="user-avatar">
-              <i className="fas fa-user-circle"></i>
-            </button>
-          </div>
-        </div>
-
-        <nav className="main-nav">
-          <div className="nav-brand">
-            <i className="fas fa-gavel"></i> SubastaYa
-          </div>
-          <div className="nav-tabs">
-            <button onClick={() => router.push('/')} className="nav-item">
-              <i className="fas fa-home"></i> Inicio
-            </button>
-            <button className="nav-item">
-              <i className="fas fa-search"></i> Buscar
-            </button>
-            <button className="nav-item active">
-              <i className="fas fa-plus-circle"></i> Crear Subasta
-            </button>
-            <button className="nav-item">
-              <i className="fas fa-heart"></i> Favoritos
-            </button>
-            <button className="nav-item">
-              <i className="fas fa-user"></i> Perfil
-            </button>
-          </div>
-        </nav>
-      </header>
-
+      <Header />
+      
       <main className="main-content create-auction-content">
         <div className="auction-form-container">
           <h1 className="auction-form-title">Crear Nueva Subasta</h1>
