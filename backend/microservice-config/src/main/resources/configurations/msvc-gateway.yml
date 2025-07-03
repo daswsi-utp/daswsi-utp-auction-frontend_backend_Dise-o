@@ -40,6 +40,10 @@ spring:
           uri: 'http://localhost:8115'
           predicates:
             - Path=/api/user/**
+        - id: search
+          uri: 'http://localhost:8120'
+          predicates:
+            - Path=api/search/**
 eureka:
   client:
     register-with-eureka: false
