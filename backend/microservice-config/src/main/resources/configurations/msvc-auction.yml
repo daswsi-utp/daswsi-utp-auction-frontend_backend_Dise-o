@@ -4,7 +4,7 @@ logging:
     org.springframework.web: DEBUG
 
 server:
-  port: 8084
+  port: 8085
   tomcat:
     accesslog:
       enabled: true
@@ -12,7 +12,7 @@ server:
 
 spring:
   application:
-    name: microservice-auction
+    name: msvc-auction
 
   datasource:
     url: jdbc:mysql://localhost:3306/service_product

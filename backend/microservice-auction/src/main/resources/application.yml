@@ -1,5 +1,5 @@
 spring:
   application:
-    name: microservice-auction
+    name: msvc-auction
   config:
     import: optional:configserver:http://localhost:8888
