@@ -1,4 +1,8 @@
 package com.microservicio.usuarios.model;
 
-public class AuthProvider {
+public enum AuthProvider {
+    LOCAL,
+    GOOGLE,
+    FACEBOOK,
+    GITHUB
 }
