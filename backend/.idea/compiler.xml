@@ -3,23 +3,16 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
-      <profile name="Annotation profile for backend" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.26/lombok-1.18.26.jar" />
-        </processorPath>
-        <module name="microservice-auction" />
-      </profile>
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="microservice-gateway" />
         <module name="microservice-payment" />
+        <module name="microservice-count" />
         <module name="microservice-simulator" />
         <module name="microservice-config" />
+        <module name="search-service" />
         <module name="microservice-product" />
         <module name="microservice-bid" />
         <module name="microservice-eureka" />
@@ -34,6 +27,16 @@
         </processorPath>
         <module name="microservice-user" />
       </profile>
+      <profile name="Annotation profile for backend" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.26/lombok-1.18.26.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.26/lombok-1.18.26.jar" />
+        </processorPath>
+        <module name="microservice-auction" />
+      </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
@@ -42,12 +45,14 @@
       <module name="microservice-bid" options="-parameters" />
       <module name="microservice-chatbot" options="-parameters" />
       <module name="microservice-config" options="-parameters" />
+      <module name="microservice-count" options="-parameters" />
       <module name="microservice-eureka" options="-parameters" />
       <module name="microservice-gateway" options="-parameters" />
       <module name="microservice-payment" options="-parameters" />
       <module name="microservice-product" options="-parameters" />
       <module name="microservice-simulator" options="-parameters" />
       <module name="microservice-user" options="-parameters" />
+      <module name="search-service" options="-parameters" />
     </option>
   </component>
 </project>

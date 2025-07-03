@@ -1,0 +1,14 @@
+server:
+  port: 8120
+
+spring:
+  application:
+    name: msvc-search
+
+auction:
+  service:
+    url: http://localhost:8085
+
+product:
+  service:
+    url: http://localhost:8105

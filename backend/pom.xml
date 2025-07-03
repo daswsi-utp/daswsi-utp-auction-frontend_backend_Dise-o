@@ -27,6 +27,8 @@
     <module>microservice-simulator</module>
     <module>microservice-user</module>
     <module>microservice-product</module>
+    <module>microservice-count</module>
+    <module>search-service</module>
   </modules>
 
   <properties>
