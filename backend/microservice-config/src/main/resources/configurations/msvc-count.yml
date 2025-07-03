@@ -5,6 +5,7 @@ spring:
     name: msvc-count
   datasource:
     url: jdbc:mysql://localhost:3306/service_product
+    username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
