@@ -1,0 +1,21 @@
+.maintenance-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh; /* Deja espacio para el navbar */
+  background-color: #f7f7f7;
+  color: #333;
+  text-align: center;
+  padding: 2rem;
+}
+
+.maintenance-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.maintenance-subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
