@@ -9,11 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.microservice.dto.ProductDTO;
 import com.microservice.service.ProductService;
 
-@CrossOrigin(
-  origins = "*",
-  allowedHeaders = "*",
-  methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS }
-)
+
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {

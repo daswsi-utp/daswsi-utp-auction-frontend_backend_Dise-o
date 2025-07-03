@@ -1,34 +1,61 @@
-//app\Services\userService.js
 import apiClient from '../Axios/axios';
 
-const USER_ENDPOINT = '/api/users';
+/**
+ * Crea un nuevo usuario.
+ * POST /users
+ * @param {Object} userData { name, email, passwordHash, ... }
+ * @returns Promise<UserDTO>
+ */
+export function createUser(userData) {
+  return apiClient.post('/users', userData);
+}
 
-export const getUserById = async (id) => {
-  try {
-    const response = await apiClient.get(`${USER_ENDPOINT}/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching user:', error);
-    throw new Error(error.response?.data?.message || 'Failed to get user');
-  }
-};
+/**
+ * Obtiene un usuario por su ID.
+ * GET /users/{id}
+ * @param {number} userId
+ * @returns Promise<UserDTO>
+ */
+export function getUserById(userId) {
+  return apiClient.get(`/users/${userId}`);
+}
 
-export const updateUser = async (id, userData) => {
-  try {
-    const response = await apiClient.put(`${USER_ENDPOINT}/${id}`, userData);
-    return response.data;
-  } catch (error) {
-    console.error('Error updating user:', error);
-    throw new Error(error.response?.data?.message || 'Failed to update user');
-  }
-};
+/**
+ * Lista todos los usuarios visibles.
+ * GET /users
+ * @returns Promise<UserDTO[]>
+ */
+export function getAllUsers() {
+  return apiClient.get('/users');
+}
 
-export const deleteUser = async (id) => {
-  try {
-    const response = await apiClient.delete(`${USER_ENDPOINT}/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error deleting user:', error);
-    throw new Error(error.response?.data?.message || 'Failed to delete user');
-  }
-};
+/**
+ * Lista usuarios por estado (ACTIVE o SUSPENDED).
+ * GET /users/status/{status}
+ * @param {string} status // e.g. 'ACTIVE'
+ * @returns Promise<UserDTO[]>
+ */
+export function getUsersByStatus(status) {
+  return apiClient.get(`/users/status/${status}`);
+}
+
+/**
+ * Actualiza un usuario existente.
+ * PUT /users/{id}
+ * @param {number} userId
+ * @param {Object} userData
+ * @returns Promise<UserDTO>
+ */
+export function updateUser(userId, userData) {
+  return apiClient.put(`/users/${userId}`, userData);
+}
+
+/**
+ * "Elimina" (marca como visible=false) un usuario.
+ * DELETE /users/{id}
+ * @param {number} userId
+ * @returns Promise<void>
+ */
+export function deleteUser(userId) {
+  return apiClient.delete(`/users/${userId}`);
+}
