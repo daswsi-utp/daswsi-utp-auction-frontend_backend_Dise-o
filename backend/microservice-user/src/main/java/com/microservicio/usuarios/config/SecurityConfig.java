@@ -56,17 +56,12 @@ public class SecurityConfig {
                                 .oidcUserService(customOidcUserService()))
                         .successHandler((request, response, authentication) -> {
                             String token = jwtAuthFilter.generateTokenFromOAuth2(authentication);
-                            String redirectUrl = "http://localhost:3000/login?oauth2success=true&token=" + token;
+                            String redirectUrl = "http://localhost:3000/login/callback?token=" + token;
                             response.sendRedirect(redirectUrl);
                         }))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
-
-    @Bean
-    public CustomOidcUserService customOidcUserService() {
-        return new CustomOidcUserService(userRepository, passwordEncoder());
     }
 
     @Bean
@@ -79,6 +74,11 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+
+    @Bean
+    public CustomOidcUserService customOidcUserService() {
+        return new CustomOidcUserService(userRepository, passwordEncoder());
     }
 
     @Bean
