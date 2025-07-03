@@ -2,7 +2,7 @@ server:
   port: 8105
 spring:
   application:
-    name: service-product
+    name: msvc-product
   datasource:
     url: jdbc:mysql://localhost:3306/service_product
     username: root
