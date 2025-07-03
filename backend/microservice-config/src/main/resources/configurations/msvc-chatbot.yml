@@ -4,9 +4,9 @@ spring:
   application:
     name: msvc-chatbot
   datasource:
-    url: jdbc:mysql://localhost:3306/chatbot_db?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/service_product
     username: root
-    password: admin10
+    password: 123456
   jpa:
     hibernate:
       ddl-auto: update

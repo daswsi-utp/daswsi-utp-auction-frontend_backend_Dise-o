@@ -1,5 +1,9 @@
 spring:
   application:
+<<<<<<< HEAD
     name: msvc-search
+=======
+    name: search-service
+>>>>>>> 773b8686563f11bdcb88d43e4a21256508612d35
   config:
     import: optional:configserver:http://localhost:8888

@@ -1,5 +1,5 @@
 spring:
   application:
-    name: microservice-bid
+    name: msvc-bid
   config:
     import: optional:configserver:http://localhost:8888

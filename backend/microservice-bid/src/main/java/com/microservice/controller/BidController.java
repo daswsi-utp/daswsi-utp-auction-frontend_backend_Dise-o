@@ -9,6 +9,11 @@ import com.microservice.service.BidService;
 
 import java.util.List;
 
+@CrossOrigin(
+  origins = "*",
+  allowedHeaders = "*",
+  methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS }
+)
 @RestController
 @RequestMapping("/api/bids")
 public class BidController {
