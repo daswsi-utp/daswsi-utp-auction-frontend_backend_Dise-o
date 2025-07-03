@@ -39,7 +39,11 @@ spring:
         - id: user
           uri: 'http://localhost:8115'
           predicates:
-            - Path=/api/user/**
+            - Path=/api/auth/**
+            - Path=/api/users/**
+            - Path=/oauth2/**
+
+
 eureka:
   client:
     register-with-eureka: false
