@@ -1,0 +1,20 @@
+spring:
+  cloud:
+    config:
+      enabled: false       # Desactiva la búsqueda de un Config Server
+  application:
+    name: microservice-auction
+  datasource:
+    url: jdbc:mysql://localhost:3306/service_product
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+server:
+  port: 8087
