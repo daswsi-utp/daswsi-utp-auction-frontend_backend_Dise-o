@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: microservice-bid
+    name: msvc-bid
   datasource:
     url: jdbc:mysql://localhost:3306/service_product
     username: root

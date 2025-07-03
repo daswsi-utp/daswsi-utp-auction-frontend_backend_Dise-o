@@ -2,6 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+<<<<<<< HEAD
+=======
       <profile default="true" name="Default" enabled="true" />
       <profile name="Annotation profile for backend" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -12,6 +14,7 @@
         </processorPath>
         <module name="microservice-auction" />
       </profile>
+>>>>>>> origin/main
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -20,6 +23,7 @@
         <module name="microservice-payment" />
         <module name="microservice-simulator" />
         <module name="microservice-config" />
+        <module name="search-service" />
         <module name="microservice-product" />
         <module name="microservice-bid" />
         <module name="microservice-eureka" />
@@ -34,6 +38,19 @@
         </processorPath>
         <module name="microservice-user" />
       </profile>
+<<<<<<< HEAD
+      <profile name="Annotation profile for backend" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.26/lombok-1.18.26.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.26/lombok-1.18.26.jar" />
+        </processorPath>
+        <module name="microservice-auction" />
+      </profile>
+=======
+>>>>>>> origin/main
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
@@ -48,6 +65,7 @@
       <module name="microservice-product" options="-parameters" />
       <module name="microservice-simulator" options="-parameters" />
       <module name="microservice-user" options="-parameters" />
+      <module name="search-service" options="-parameters" />
     </option>
   </component>
 </project>

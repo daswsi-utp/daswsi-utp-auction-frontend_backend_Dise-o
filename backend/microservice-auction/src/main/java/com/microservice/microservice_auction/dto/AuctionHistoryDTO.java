@@ -3,7 +3,9 @@ package com.microservice.microservice_auction.dto;
 import lombok.*;
 import java.time.LocalDateTime;
 
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@Data @NoArgsConstructor @AllArgsConstructor @Builder @JsonIgnoreProperties(ignoreUnknown = true)
 public class AuctionHistoryDTO {
     private Long id;
     private Long userId;

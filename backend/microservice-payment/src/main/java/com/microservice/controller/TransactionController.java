@@ -10,6 +10,11 @@ import com.microservice.service.TransactionService;
 
 import java.util.List;
 
+@CrossOrigin(
+  origins = "*",
+  allowedHeaders = "*",
+  methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS }
+)
 @RestController
 @RequestMapping("/api/transactions")
 public class TransactionController {
