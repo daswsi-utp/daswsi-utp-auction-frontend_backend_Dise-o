@@ -1,12 +1,17 @@
+// app/login/register/page.jsx
 'use client';
 
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { register } from '../../Services/authService';
+import { setAuthToken } from '../../utils/auth';
 import '../../styles/login1.css';
 
 function Register() {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,6 +22,7 @@ function Register() {
     country: '',
     zipcode: ''
   });
+  const router = useRouter();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -26,19 +32,44 @@ function Register() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (formData.password !== formData.confirmPassword) {
+      setError('Las contraseñas no coinciden');
+      return;
+    }
+    
     setIsLoading(true);
-    setTimeout(() => {
+    setError('');
+    
+    try {
+      const userData = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        phone: formData.phone,
+        address: formData.address,
+        country: formData.country,
+        zipcode: formData.zipcode
+      };
+      
+      const response = await register(userData);
+      setAuthToken(response.token);
+      router.push('/');
+    } catch (err) {
+      // El error ya viene formateado desde el interceptor de Axios
+      setError(err.message || 'Error desconocido al registrar el usuario.');
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const handleGoogleRegister = () => {
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
+    // Asegúrate de que NEXT_PUBLIC_API_BASE_URL apunte al Gateway (http://localhost:8080)
+    // y que el path sea /oauth2/authorize/google
+    window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/oauth2/authorize/google`;
   };
 
   return (
@@ -87,6 +118,8 @@ function Register() {
             <h1 className="auth-title">Crear una cuenta</h1>
             <p className="auth-subtitle">Completa el formulario para registrarte</p>
           </div>
+          
+          {error && <div className="auth-error">{error}</div>}
           
           <button 
             onClick={handleGoogleRegister}

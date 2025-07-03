@@ -1,34 +1,22 @@
+//app\login\profile\page.jsx
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import '../profile/profile.css';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { getCurrentUser, updateUser } from '../../Services/userService';
+import { getAuthToken, clearAuthToken, isAuthenticated } from '../../utils/auth';
 import Notificaciones from '../../notifications/page';
+import '../profile/profile.css';
 
 function Profile() {
-  // Estados para los datos del usuario
-  const [userData] = useState({
-    name: 'Juan Pérez',
-    email: 'juan.perez@example.com',
-    phone: '+5491123456789',
-    address: 'Calle Falsa 123',
-    country: 'AR',
-    zipcode: 'C1425',
-    profileImage: '/iconos/perfilusuarios.png'
-  });
-
-  // Estados para el historial de subastas
-  const [auctionHistory] = useState([
-    { id: 1, item: 'Reloj Vintage', date: '10/04/2023', status: 'Ganada', price: '$1,200', image: '/auction1.jpg' },
-    { id: 2, item: 'Pintura al Óleo', date: '22/05/2023', status: 'Perdida', price: '$850', image: '/auction2.jpg' },
-    { id: 3, item: 'Colección de Monedas', date: '05/06/2023', status: 'Activa', price: '$1,750', image: '/auction3.jpg' },
-  ]);
-
-  // Estados para la interfaz
+  const [userData, setUserData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('info');
   const [isEditing, setIsEditing] = useState(false);
-  
-  // Estado para notificaciones
+  const [editedData, setEditedData] = useState({});
   const [notificationSettings, setNotificationSettings] = useState({
     email: true,
     bidActivity: true,
@@ -36,18 +24,7 @@ function Profile() {
     push: true,
     payment: true
   });
-
-  // Estados para métodos de pago
-  const [paymentMethods, setPaymentMethods] = useState([
-    {
-      type: 'credit_card',
-      cardNumber: '4242424242424242',
-      cardName: 'Juan Pérez',
-      expiryDate: '12/25',
-      cvv: '123',
-      isDefault: true
-    }
-  ]);
+  const [paymentMethods, setPaymentMethods] = useState([]);
   const [showAddPaymentModal, setShowAddPaymentModal] = useState(false);
   const [newPaymentMethod, setNewPaymentMethod] = useState({
     type: 'credit_card',
@@ -57,19 +34,87 @@ function Profile() {
     cvv: '',
     isDefault: false
   });
-
-  // Estados para seguridad
   const [securityData, setSecurityData] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
     twoFactorAuth: false
   });
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      router.push('/login');
+      return;
+    }
+
+    const fetchUserData = async () => {
+      try {
+        const user = await getCurrentUser();
+        setUserData(user);
+        setEditedData(user);
+        
+        // Simular carga de métodos de pago (deberías implementar un servicio real)
+        setPaymentMethods(user.paymentMethods || []);
+        setNotificationSettings(user.notificationSettings || {
+          email: true,
+          bidActivity: true,
+          auctionEnding: true,
+          push: true,
+          payment: true
+        });
+      } catch (err) {
+        setError(err.message || 'Error al cargar los datos del usuario');
+        if (err.message.includes('No autorizado')) {
+          clearAuthToken();
+          router.push('/login');
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [router]);
+
+  const handleEditClick = () => setIsEditing(!isEditing);
+
+  const handleSaveClick = async () => {
+    try {
+      setIsLoading(true);
+      const updatedUser = await updateUser(userData.id, editedData);
+      setUserData(updatedUser);
+      setEditedData(updatedUser);
+      setIsEditing(false);
+    } catch (err) {
+      setError(err.message || 'Error al actualizar los datos del usuario');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCancelClick = () => {
+    setEditedData(userData);
+    setIsEditing(false);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleLogout = () => {
+    clearAuthToken();
+    router.push('/login');
+  };
 
   // Funciones para métodos de pago
   const handleAddPaymentMethod = () => {
     if (!newPaymentMethod.cardNumber || !newPaymentMethod.cardName || !newPaymentMethod.expiryDate || !newPaymentMethod.cvv) {
-      alert('Por favor completa todos los campos');
+      setError('Por favor completa todos los campos');
       return;
     }
 
@@ -126,12 +171,13 @@ function Profile() {
 
   const saveNotificationSettings = async () => {
     try {
-      // Simular llamada a API
+      // Aquí deberías implementar la llamada real al backend
       console.log('Guardando configuración:', notificationSettings);
+      setError('');
+      // Simular éxito
       alert('Configuración de notificaciones guardada correctamente');
-    } catch (error) {
-      console.error('Error al guardar configuración:', error);
-      alert('Error al guardar la configuración');
+    } catch (err) {
+      setError(err.message || 'Error al guardar la configuración');
     }
   };
 
@@ -148,13 +194,15 @@ function Profile() {
     e.preventDefault();
     
     if (securityData.newPassword !== securityData.confirmPassword) {
-      alert('Las contraseñas nuevas no coinciden');
+      setError('Las contraseñas nuevas no coinciden');
       return;
     }
 
     try {
-      // Simular llamada a API
+      // Aquí deberías implementar la llamada real al backend
       console.log('Datos de seguridad:', securityData);
+      setError('');
+      // Simular éxito
       alert('Configuración de seguridad actualizada');
       setSecurityData({
         currentPassword: '',
@@ -162,17 +210,10 @@ function Profile() {
         confirmPassword: '',
         twoFactorAuth: securityData.twoFactorAuth
       });
-    } catch (error) {
-      console.error('Error al actualizar seguridad:', error);
-      alert('Error al actualizar la configuración de seguridad');
+    } catch (err) {
+      setError(err.message || 'Error al actualizar la configuración de seguridad');
     }
   };
-
-  // Otras funciones
-  const handleEditClick = () => setIsEditing(!isEditing);
-  const handleSaveClick = () => setIsEditing(false);
-  const handleCancelClick = () => setIsEditing(false);
-  const handleTabChange = (tab) => setActiveTab(tab);
 
   const getCountryName = (code) => {
     const countries = {
@@ -192,9 +233,28 @@ function Profile() {
     return `**** **** **** ${lastFour}`;
   };
 
+  if (isLoading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Cargando perfil...</p>
+      </div>
+    );
+  }
+
+  if (!userData) {
+    return (
+      <div className="error-container">
+        {error || 'Usuario no encontrado'}
+        <button onClick={() => router.push('/login')} className="auth-btn auth-btn-primary mt-4">
+          Volver al login
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="profile-container">
-      {/* Botón de volver añadido aquí */}
       <Link href="/" className="back-button">
         <i className="fas fa-arrow-left"></i> Volver al Inicio
       </Link>
@@ -204,7 +264,7 @@ function Profile() {
         <div className="profile-avatar-container">
           <div className="profile-avatar-wrapper">
             <img 
-              src={userData.profileImage} 
+              src={userData.profileImage || '/iconos/perfilusuarios.png'} 
               alt="Foto de perfil" 
               className="profile-avatar"
             />
@@ -214,20 +274,26 @@ function Profile() {
                 <input 
                   type="file" 
                   className="hidden"
+                  onChange={(e) => {
+                    // Implementar lógica para subir imagen si es necesario
+                  }}
                 />
               </label>
             )}
           </div>
           <h1 className="profile-name">{userData.name}</h1>
+          <button onClick={handleLogout} className="logout-btn">
+            <i className="fas fa-sign-out-alt"></i> Cerrar sesión
+          </button>
         </div>
         
         <div className="profile-stats">
           <div className="stat-item">
-            <div className="stat-number">12</div>
+            <div className="stat-number">{userData.auctionsCount || 0}</div>
             <div className="stat-title">Subastas</div>
           </div>
           <div className="stat-item">
-            <div className="stat-number">5</div>
+            <div className="stat-number">{userData.wonAuctionsCount || 0}</div>
             <div className="stat-title">Ganadas</div>
           </div>
         </div>
@@ -237,25 +303,25 @@ function Profile() {
       <div className="profile-tabs">
         <button 
           className={`tab-btn ${activeTab === 'info' ? 'active' : ''}`}
-          onClick={() => handleTabChange('info')}
+          onClick={() => setActiveTab('info')}
         >
           <i className="fas fa-user"></i> Información
         </button>
         <button 
           className={`tab-btn ${activeTab === 'auctions' ? 'active' : ''}`}
-          onClick={() => handleTabChange('auctions')}
+          onClick={() => setActiveTab('auctions')}
         >
           <i className="fas fa-gavel"></i> Subastas
         </button>
         <button 
           className={`tab-btn ${activeTab === 'notifications' ? 'active' : ''}`}
-          onClick={() => handleTabChange('notifications')}
+          onClick={() => setActiveTab('notifications')}
         >
           <i className="fas fa-bell"></i> Notificaciones
         </button>
         <button 
           className={`tab-btn ${activeTab === 'settings' ? 'active' : ''}`}
-          onClick={() => handleTabChange('settings')}
+          onClick={() => setActiveTab('settings')}
         >
           <i className="fas fa-cog"></i> Configuración
         </button>
@@ -263,6 +329,8 @@ function Profile() {
 
       {/* Contenido de las pestañas */}
       <div className="tab-content">
+        {error && <div className="profile-error">{error}</div>}
+        
         {activeTab === 'info' && (
           <div className="info-content">
             <div className="section-header">
@@ -287,7 +355,8 @@ function Profile() {
                     <input
                       type="text"
                       name="name"
-                      defaultValue={userData.name}
+                      value={editedData.name || ''}
+                      onChange={handleInputChange}
                     />
                   </div>
                   <div className="form-group">
@@ -295,7 +364,8 @@ function Profile() {
                     <input
                       type="email"
                       name="email"
-                      defaultValue={userData.email}
+                      value={editedData.email || ''}
+                      onChange={handleInputChange}
                       disabled
                     />
                   </div>
@@ -304,7 +374,8 @@ function Profile() {
                     <input
                       type="tel"
                       name="phone"
-                      defaultValue={userData.phone}
+                      value={editedData.phone || ''}
+                      onChange={handleInputChange}
                     />
                   </div>
                   <div className="form-group">
@@ -312,14 +383,16 @@ function Profile() {
                     <input
                       type="text"
                       name="address"
-                      defaultValue={userData.address}
+                      value={editedData.address || ''}
+                      onChange={handleInputChange}
                     />
                   </div>
                   <div className="form-group">
                     <label>País</label>
                     <select
                       name="country"
-                      defaultValue={userData.country}
+                      value={editedData.country || ''}
+                      onChange={handleInputChange}
                     >
                       <option value="AR">Argentina</option>
                       <option value="BO">Bolivia</option>
@@ -348,7 +421,8 @@ function Profile() {
                     <input
                       type="text"
                       name="zipcode"
-                      defaultValue={userData.zipcode}
+                      value={editedData.zipcode || ''}
+                      onChange={handleInputChange}
                     />
                   </div>
                 </div>
@@ -433,9 +507,9 @@ function Profile() {
               <i className="fas fa-gavel"></i> Historial de Subastas
             </h2>
             
-            {auctionHistory.length > 0 ? (
+            {userData.auctionHistory && userData.auctionHistory.length > 0 ? (
               <div className="auctions-grid">
-                {auctionHistory.map(auction => (
+                {userData.auctionHistory.map(auction => (
                   <div key={auction.id} className={`auction-card ${auction.status.toLowerCase()}`}>
                     <div className="auction-image" style={{ backgroundImage: `url(${auction.image})` }}></div>
                     <div className="auction-details">
@@ -471,7 +545,11 @@ function Profile() {
 
         {activeTab === 'notifications' && (
           <div className="notifications-content">
-            <Notificaciones notificationSettings={notificationSettings} />
+            <Notificaciones 
+              notificationSettings={notificationSettings} 
+              onNotificationChange={handleNotificationChange}
+              onSave={saveNotificationSettings}
+            />
           </div>
         )}
 

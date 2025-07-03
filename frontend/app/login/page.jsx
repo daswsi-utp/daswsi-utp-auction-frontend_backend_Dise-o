@@ -1,8 +1,12 @@
+// app/login/page.jsx
 'use client';
 
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { login } from '../Services/authService';
+import { setAuthToken } from '../utils/auth';
 import '../styles/login1.css';
 
 function Login() {
@@ -12,9 +16,27 @@ function Login() {
     email: '',
     password: ''
   });
+  const [error, setError] = useState('');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Check for OAuth errors or session expiration
+  React.useEffect(() => {
+    const oauthError = searchParams.get('error');
+    const sessionExpired = searchParams.get('sessionExpired');
+    
+    if (oauthError) {
+      setError('Error al autenticar con Google. Inténtalo de nuevo.');
+    }
+    
+    if (sessionExpired) {
+      setError('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
+    }
+  }, [searchParams]);
 
   const showScreen = (screenName) => {
     setScreen(screenName);
+    setError('');
   };
 
   const handleInputChange = (e) => {
@@ -25,19 +47,28 @@ function Login() {
     }));
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
+    setError('');
+    
+    try {
+      const response = await login(formData);
+      setAuthToken(response.token);
+      router.push('/');
+    } catch (err) {
+      // El error ya viene formateado desde el interceptor de Axios
+      setError(err.message || 'Error desconocido al iniciar sesión.');
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const handleGoogleLogin = () => {
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
+    // Asegúrate de que NEXT_PUBLIC_API_BASE_URL apunte al Gateway (http://localhost:8080)
+    // y que el path sea /oauth2/authorize/google
+    window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/oauth2/authorize/google`;
   };
 
   return (
@@ -87,6 +118,8 @@ function Login() {
               <h1 className="auth-title">Bienvenido a Subastas</h1>
               <p className="auth-subtitle">Accede para descubrir las mejores ofertas</p>
             </div>
+            
+            {error && <div className="auth-error">{error}</div>}
             
             <div className="steps-container">
               <div className="step">
@@ -162,6 +195,8 @@ function Login() {
               <h1 className="auth-title">Iniciar Sesión</h1>
               <p className="auth-subtitle">Ingresa tus credenciales para continuar</p>
             </div>
+            
+            {error && <div className="auth-error">{error}</div>}
             
             <form onSubmit={handleLogin}>
               <div className="form-group">
