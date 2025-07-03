@@ -16,6 +16,7 @@
         <module name="microservice-eureka" />
         <module name="microservice-chatbot" />
       </profile>
+<<<<<<< HEAD
       <profile name="Annotation profile for microservice-user" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -25,6 +26,8 @@
         </processorPath>
         <module name="microservice-user" />
       </profile>
+=======
+>>>>>>> 3e9a876b07314bd20e5d2e755d5b84aacd1ed0c2
       <profile name="Annotation profile for backend" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />

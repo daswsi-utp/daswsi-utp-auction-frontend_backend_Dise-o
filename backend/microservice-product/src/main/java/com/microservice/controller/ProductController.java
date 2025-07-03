@@ -10,7 +10,7 @@ import com.microservice.dto.ProductDTO;
 import com.microservice.service.ProductService;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 public class ProductController {
 
     @Autowired
