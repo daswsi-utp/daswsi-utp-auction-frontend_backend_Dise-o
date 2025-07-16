@@ -6,14 +6,9 @@ spring:
     name: msvc-chatbot
 
   datasource:
-<<<<<<< HEAD
-    url: jdbc:mysql://localhost:3306/service_product
-    username: root
-    password: 123456
-=======
     url: jdbc:mysql://localhost:3306/chatbot_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
     username: root
-    password: admin10
+    password: 250520
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 15  # Aumentado para servicio de chatbot que puede tener alta concurrencia
@@ -24,7 +19,6 @@ spring:
       pool-name: ChatbotHikariPool
       leak-detection-threshold: 60000  # Detección de conexiones perdidas
 
->>>>>>> 0b8f0e8a544e38ad0823415f396cc1a3421fd1f3
   jpa:
     hibernate:
       ddl-auto: update
@@ -33,14 +27,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-<<<<<<< HEAD
-eureka:
-  instance:
-    hostname: localhost
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka
-=======
         format_sql: true
         jdbc:
           batch_size: 20
@@ -115,4 +101,3 @@ chatbot:
   max-conversation-history: 10
   timeout-seconds: 30
   default-language: es
->>>>>>> 0b8f0e8a544e38ad0823415f396cc1a3421fd1f3
