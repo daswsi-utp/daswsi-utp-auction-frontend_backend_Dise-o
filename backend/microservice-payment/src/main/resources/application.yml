@@ -1,5 +1,34 @@
+server:
+  port: 8100
+
 spring:
   application:
     name: msvc-payment
   config:
     import: optional:configserver:http://localhost:8888
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/payment_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: 250520
+  jpa:
+    hibernate:
+      ddl-auto: update  # Cambiado a update para desarrollo
+    database-platform: org.hibernate.dialect.MySQLDialect  # Dialecto actualizado
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+# Configuración adicional recomendada
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE

@@ -5,32 +5,82 @@ logging:
 
 server:
   port: 8085
+<<<<<<< HEAD
   tomcat:
     accesslog:
       enabled: true
       pattern: "%h %l %u %t \"%r\" %s %b"
+=======
+>>>>>>> 0b8f0e8a544e38ad0823415f396cc1a3421fd1f3
 
 spring:
   application:
     name: msvc-auction
 
   datasource:
-    url: jdbc:mysql://localhost:3306/service_product
+    url: jdbc:mysql://localhost:3306/service_product?useSSL=false&serverTimezone=UTC
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
 
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+<<<<<<< HEAD
+=======
+        format_sql: true
+        jdbc:
+          batch_size: 30
+          order_inserts: true
+          order_updates: true
+    open-in-view: false
+
+  sql:
+    init:
+      mode: always
+      platform: mysql
+
+logging:
+  level:
+    org.springframework: INFO
+    org.hibernate: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.yourpackage: DEBUG
+>>>>>>> 0b8f0e8a544e38ad0823415f396cc1a3421fd1f3
 
 eureka:
   instance:
     hostname: localhost
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    prefer-ip-address: true
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka
+<<<<<<< HEAD
+=======
+    healthcheck:
+      enabled: true
+    fetch-registry: true
+    register-with-eureka: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      show-details: always
+>>>>>>> 0b8f0e8a544e38ad0823415f396cc1a3421fd1f3
