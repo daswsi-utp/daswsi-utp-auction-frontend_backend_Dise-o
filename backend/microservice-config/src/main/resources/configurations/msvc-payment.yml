@@ -1,24 +1,126 @@
 server:
   port: 8100
+  ssl:  # Recomendado para servicio de pagos
+    enabled: false  # Cambiar a true en producción con certificados adecuados
+    key-store: classpath:keystore.p12
+    key-store-password: changeit
+    key-store-type: PKCS12
+    key-alias: tomcat
 
 spring:
   application:
     name: msvc-payment
+
   datasource:
-    url: jdbc:mysql://localhost:3306/service_product
+    url: jdbc:mysql://localhost:3306/service_product?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      pool-name: PaymentHikariPool
+      leak-detection-threshold: 60000
+      initialization-fail-timeout: 60000
+
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+        jdbc:
+          batch_size: 20
+          order_inserts: true
+          order_updates: true
+        generate_statistics: false  # Desactivado por defecto para producción
+        connection:
+          provider_disables_autocommit: true
+    open-in-view: false
+
+  transaction:
+    default-timeout: 30  # 30 segundos timeout para transacciones
+    rollback-on-commit-failure: true
+
+  sql:
+    init:
+      mode: always
+      platform: mysql
+      schema-locations: classpath:payment-schema.sql
+      data-locations: classpath:payment-data.sql
+
+  # Configuración para reintentos de transacciones
+  retry:
+    max-attempts: 3
+    backoff:
+      delay: 1000
+      multiplier: 2.0
+
+logging:
+  level:
+    org.springframework: INFO
+    org.hibernate: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.msvc.payment: DEBUG
+    org.springframework.transaction: DEBUG
+    org.springframework.retry: DEBUG
+
 eureka:
   instance:
     hostname: localhost
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    prefer-ip-address: true
+    metadata-map:
+      payment-version: 1.0
+      secure: false
+    lease-renewal-interval-in-seconds: 5  # Más frecuente para servicio crítico
+    lease-expiration-duration-in-seconds: 15
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka
+    healthcheck:
+      enabled: true
+    fetch-registry: true
+    register-with-eureka: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus, transactions
+      cors:
+        allowed-origins: "*"
+        allowed-methods: "*"
+  endpoint:
+    health:
+      show-details: always
+      group:
+        critical:
+          include: db, diskSpace
+        payment:
+          include: paymentService, transactionService
+    metrics:
+      enabled: true
+    transactions:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# Configuración específica para pagos
+payment:
+  max-retries: 3
+  timeout-seconds: 30
+  currencies-supported: [USD, EUR, PEN]
+  default-currency: USD
+  audit:
+    enabled: true
+    retention-days: 90
