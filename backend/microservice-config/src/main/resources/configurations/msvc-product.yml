@@ -1,23 +1,131 @@
 server:
   port: 8105
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
+    min-response-size: 1024
+
 spring:
   application:
-    name: service-product
+    name: msvc-product
+
   datasource:
-    url: jdbc:mysql://localhost:3306/service_product
+    url: jdbc:mysql://localhost:3306/service_product?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&cachePrepStmts=true&prepStmtCacheSize=250&prepStmtCacheSqlLimit=2048
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 15  # Tamaño mayor para servicio de productos que puede tener alta concurrencia
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      pool-name: ProductHikariPool
+      leak-detection-threshold: 60000
+
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+        jdbc:
+          batch_size: 30  # Tamaño mayor para operaciones con productos
+          order_inserts: true
+          order_updates: true
+        generate_statistics: true
+        query:
+          in_clause_parameter_padding: true  # Optimización para consultas con IN
+    open-in-view: false
+
+  sql:
+    init:
+      mode: always
+      platform: mysql
+      schema-locations: classpath:product-schema.sql
+      data-locations: classpath:product-data.sql
+
+  cache:  # Configuración de caché para productos
+    type: redis
+    redis:
+      time-to-live: 300000  # 5 minutos cache
+      cache-null-values: false
+      key-prefix: product_
+      use-key-prefix: true
+
+  redis:  # Configuración de conexión Redis
+    host: localhost
+    port: 6379
+    password:
+    timeout: 5000
+
+logging:
+  level:
+    org.springframework: INFO
+    org.hibernate: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.msvc.product: DEBUG
+    org.springframework.cache: DEBUG
+    org.springframework.web: DEBUG
+
 eureka:
   instance:
     hostname: localhost
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    prefer-ip-address: true
+    metadata-map:
+      version: 1.0
+      cache-enabled: true
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka
+    healthcheck:
+      enabled: true
+    fetch-registry: true
+    register-with-eureka: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus, cache
+      cors:
+        allowed-origins: "*"
+        allowed-methods: "*"
+  endpoint:
+    health:
+      show-details: always
+      group:
+        critical:
+          include: db, diskSpace, redis
+        product:
+          include: productService, inventoryService
+    metrics:
+      enabled: true
+    cache:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# Configuración específica para productos
+product:
+  cache:
+    enabled: true
+    ttl: 300  # 5 minutos en segundos
+  pagination:
+    default-size: 20
+    max-size: 100
+  image:
+    max-size-mb: 5
+    allowed-types: [image/jpeg, image/png, image/webp]
+  inventory:
+    update-threshold: 10
+    batch-size: 50
