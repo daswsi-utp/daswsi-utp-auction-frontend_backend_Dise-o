@@ -11,6 +11,7 @@
         <module name="microservice-payment" />
         <module name="microservice-simulator" />
         <module name="search-service" />
+        <module name="microservice-config" />
         <module name="microservice-product" />
         <module name="microservice-bid" />
         <module name="microservice-eureka" />
@@ -21,7 +22,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
         <module name="microservice-user" />
@@ -34,15 +34,6 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.32/lombok-1.18.32.jar" />
         </processorPath>
         <module name="microservice-auction" />
-      </profile>
-      <profile name="Annotation profile for microservice-config" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-        </processorPath>
-        <module name="microservice-config" />
       </profile>
     </annotationProcessing>
   </component>
