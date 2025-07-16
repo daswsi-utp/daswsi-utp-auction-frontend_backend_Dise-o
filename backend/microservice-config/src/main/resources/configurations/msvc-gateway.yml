@@ -42,7 +42,10 @@ spring:
             - Path=/api/auth/**
             - Path=/api/users/**
             - Path=/oauth2/**
-
+        - id: search
+          uri: 'http://localhost:8120'
+          predicates:
+            - Path=/api/search**
 
 eureka:
   client:
