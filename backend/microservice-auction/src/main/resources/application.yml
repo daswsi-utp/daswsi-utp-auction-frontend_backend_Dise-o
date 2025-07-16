@@ -1,5 +1,23 @@
+server:
+  port: 8085
+
 spring:
   application:
     name: microservice-auction
   config:
     import: optional:configserver:http://localhost:8888
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/auction_db?useSSL=false&serverTimezone=UTC
+    username: root
+    password: 250520
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
