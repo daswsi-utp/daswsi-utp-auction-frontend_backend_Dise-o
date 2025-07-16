@@ -1,5 +1,57 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: msvc-gateway
   config:
-    import: 'optional:configserver:http://localhost:8888'
+    import: optional:configserver:http://localhost:8888
+  main:
+    web-application-type: reactive
+    cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: auction
+          uri: 'http://localhost:8085'
+          predicates:
+            - Path=/api/auctions/**
+            - Path=/api/auction-history/**
+        - id: bid
+          uri: 'http://localhost:8090'
+          predicates:
+            - Path=/api/bids/**
+        - id: chatbot
+          uri: 'http://localhost:8095'
+          predicates:
+            - Path=/api/chat/**
+            - Path=/api/ping/**
+        - id: payment
+          uri: 'http://localhost:8100'
+          predicates:
+            - Path=/api/transactions/**
+        - id: product
+          uri: 'http://localhost:8105'
+          predicates:
+            - Path=/api/products/**
+        - id: simulator
+          uri: 'http://localhost:8110'
+          predicates:
+            - Path=/api/simulator/**
+        - id: user
+          uri: 'http://localhost:8115'
+          predicates:
+            - Path=/api/auth/**
+            - Path=/api/users/**
+            - Path=/oauth2/**
+        - id: search
+          uri: 'http://localhost:8120'
+          predicates:
+            - Path=/api/search**
+
+
+eureka:
+  client:
+    register-with-eureka: false
