@@ -1,0 +1,4 @@
+server.port=8120
+spring.application.name=search-service
+
+
