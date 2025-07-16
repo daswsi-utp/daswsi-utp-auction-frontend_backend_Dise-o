@@ -27,7 +27,10 @@
     <module>microservice-simulator</module>
     <module>microservice-user</module>
     <module>microservice-product</module>
+<<<<<<< HEAD
     <module>microservice-count</module>
+=======
+>>>>>>> 0b8f0e8a544e38ad0823415f396cc1a3421fd1f3
     <module>search-service</module>
   </modules>
 

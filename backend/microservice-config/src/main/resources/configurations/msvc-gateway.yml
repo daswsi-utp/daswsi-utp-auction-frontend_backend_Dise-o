@@ -45,12 +45,16 @@ spring:
         - id: search
           uri: 'http://localhost:8120'
           predicates:
+<<<<<<< HEAD
             - Path=/api/search/**
         - id: count
           uri: 'http://localhost:8125'
           predicates:
             - Path=/api/count/**
 
+=======
+            - Path=/api/search**
+>>>>>>> 0b8f0e8a544e38ad0823415f396cc1a3421fd1f3
 
 eureka:
   client:

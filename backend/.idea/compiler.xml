@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
+<<<<<<< HEAD
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -38,22 +39,8 @@
         </processorPath>
         <module name="microservice-auction" />
       </profile>
+=======
+>>>>>>> kevin
     </annotationProcessing>
-  </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="microservice-auction" options="-parameters" />
-      <module name="microservice-bid" options="-parameters" />
-      <module name="microservice-chatbot" options="-parameters" />
-      <module name="microservice-config" options="-parameters" />
-      <module name="microservice-count" options="-parameters" />
-      <module name="microservice-eureka" options="-parameters" />
-      <module name="microservice-gateway" options="-parameters" />
-      <module name="microservice-payment" options="-parameters" />
-      <module name="microservice-product" options="-parameters" />
-      <module name="microservice-simulator" options="-parameters" />
-      <module name="microservice-user" options="-parameters" />
-      <module name="search-service" options="-parameters" />
-    </option>
   </component>
 </project>
