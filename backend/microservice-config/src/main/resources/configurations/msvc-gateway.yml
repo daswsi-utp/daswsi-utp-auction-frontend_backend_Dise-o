@@ -10,39 +10,39 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: auction
+        - id: microservice-auction
           uri: 'http://localhost:8085'
           predicates:
             - Path=/api/auctions/**
             - Path=/api/auction-history/**
-        - id: bid
+        - id: microservice-bid
           uri: 'http://localhost:8090'
           predicates:
             - Path=/api/bids/**
-        - id: chatbot
+        - id: microservice-chatbot
           uri: 'http://localhost:8095'
           predicates:
             - Path=/api/chat/**
             - Path=/api/ping/**
-        - id: payment
+        - id: microservice-payment
           uri: 'http://localhost:8100'
           predicates:
             - Path=/api/transactions/**
-        - id: product
+        - id: microservice-product
           uri: 'http://localhost:8105'
           predicates:
             - Path=/api/products/**
-        - id: simulator
+        - id: microservice-simulator
           uri: 'http://localhost:8110'
           predicates:
             - Path=/api/simulator/**
-        - id: user
+        - id: microservice-user
           uri: 'http://localhost:8115'
           predicates:
             - Path=/api/auth/**
             - Path=/api/users/**
             - Path=/oauth2/**
-        - id: search
+        - id: microservice-search
           uri: 'http://localhost:8120'
           predicates:
             - Path=/api/search**
