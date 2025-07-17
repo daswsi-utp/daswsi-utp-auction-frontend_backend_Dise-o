@@ -1,12 +1,13 @@
 // app/login/callback/page.jsx
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { setAuthToken } from '../../utils/auth';
 import { oauthSuccess } from '../../Services/oauthService';
 
-export default function OAuthCallback() {
+// Componente principal para manejar OAuth
+function OAuthCallback() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
@@ -22,7 +23,6 @@ export default function OAuthCallback() {
 
         if (token) {
           setAuthToken(token);
-          
           
           // Redirigir a la página original o al home
           const redirectUrl = searchParams.get('redirect') || '/';
@@ -47,3 +47,12 @@ export default function OAuthCallback() {
     </div>
   );
 }
+
+// Envolver el componente OAuthCallback dentro de Suspense
+const OAuthCallbackSuspense = () => (
+  <Suspense fallback={<div>Cargando...</div>}>
+    <OAuthCallback />
+  </Suspense>
+);
+
+export default OAuthCallbackSuspense;

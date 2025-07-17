@@ -1,7 +1,6 @@
-// app/login/page.jsx
-'use client';
+'use client'; // Asegúrate de que este archivo se ejecute solo en el cliente.
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -9,6 +8,7 @@ import { login } from '../Services/authService';
 import { setAuthToken } from '../utils/auth';
 import '../styles/login1.css';
 
+// Componente principal para Login
 function Login() {
   const [screen, setScreen] = useState('welcome');
   const [isLoading, setIsLoading] = useState(false);
@@ -18,19 +18,27 @@ function Login() {
   });
   const [error, setError] = useState('');
   const router = useRouter();
-  const searchParams = useSearchParams();
+  
+  // Declaramos searchParams solo dentro de un hook useEffect, para asegurarnos de que no se ejecute durante la prerenderización.
+  const [searchParams, setSearchParams] = useState(null);
 
-  // Check for OAuth errors or session expiration
-  React.useEffect(() => {
-    const oauthError = searchParams.get('error');
-    const sessionExpired = searchParams.get('sessionExpired');
+  useEffect(() => {
+    // Solo ejecutamos este código en el cliente
+    setSearchParams(new URLSearchParams(window.location.search));
+  }, []);
+
+  useEffect(() => {
+    if (searchParams) {
+      const oauthError = searchParams.get('error');
+      const sessionExpired = searchParams.get('sessionExpired');
     
-    if (oauthError) {
-      setError('Error al autenticar con Google. Inténtalo de nuevo.');
-    }
+      if (oauthError) {
+        setError('Error al autenticar con Google. Inténtalo de nuevo.');
+      }
     
-    if (sessionExpired) {
-      setError('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
+      if (sessionExpired) {
+        setError('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
+      }
     }
   }, [searchParams]);
 
@@ -57,7 +65,6 @@ function Login() {
       setAuthToken(response.token);
       router.push('/');
     } catch (err) {
-      // El error ya viene formateado desde el interceptor de Axios
       setError(err.message || 'Error desconocido al iniciar sesión.');
     } finally {
       setIsLoading(false);
@@ -66,8 +73,6 @@ function Login() {
 
   const handleGoogleLogin = () => {
     setIsLoading(true);
-    // Asegúrate de que NEXT_PUBLIC_API_BASE_URL apunte al Gateway (http://localhost:8080)
-    // y que el path sea /oauth2/authorize/google
     window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/oauth2/authorize/google`;
   };
 
