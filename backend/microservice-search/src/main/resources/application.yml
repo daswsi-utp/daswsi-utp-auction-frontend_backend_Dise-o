@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: search-service
+    name: microservice-search
   config:
     import: optional:configserver:http://localhost:8888
   datasource:
