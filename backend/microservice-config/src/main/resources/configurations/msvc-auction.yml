@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: msvc-auction
+    name: microservice-auction
 
   datasource:
     url: jdbc:mysql://localhost:3306/service_product?useSSL=false&serverTimezone=UTC
