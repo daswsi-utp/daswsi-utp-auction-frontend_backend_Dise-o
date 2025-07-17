@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: msvc-bid
+    name: microservice-bid
   config:
     import: optional:configserver:http://localhost:8888
   datasource:
